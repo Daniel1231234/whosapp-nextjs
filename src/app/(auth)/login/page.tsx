@@ -4,6 +4,8 @@ import { FC, useState } from "react";
 import { signIn } from "next-auth/react";
 import { toast } from "react-hot-toast";
 import Button from "@/components/UI/Button";
+import { FacebookIcon } from "lucide-react";
+
 
 const Page: FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -17,6 +19,14 @@ const Page: FC = () => {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  const loginWithFacebook = async () => {    
+    try {
+      await signIn("facebook");
+    } catch (error) {
+      toast.error("Something went wrong with your login.");
+    } 
   }
 
   return (
@@ -66,8 +76,12 @@ const Page: FC = () => {
                 <path d="M1 1h22v22H1z" fill="none" />
               </svg>
             )}
-            Google
+            Sign in with Google
           </Button>
+          <Button type="button"  className="max-w-sm mx-auto w-full" onClick={loginWithFacebook}>
+            <FacebookIcon className="w-6 h-6 " />
+            Sign in with Facebook
+            </Button>
         </div>
       </div>
     </>
