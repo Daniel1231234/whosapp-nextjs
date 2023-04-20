@@ -2,7 +2,7 @@ import { fetchRedis } from './redis'
 
 export const getFriendsByUserId = async (userId: string) => {
   // retrieve friends for current user
-  console.log("userid", userId)
+  // console.log("userid line 5", userId)
   const friendIds = (await fetchRedis(
     'smembers',
     `user:${userId}:friends`
@@ -19,3 +19,5 @@ export const getFriendsByUserId = async (userId: string) => {
 
   return friends
 }
+
+

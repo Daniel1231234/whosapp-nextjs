@@ -1,4 +1,4 @@
-import { Icon, Icons } from "@/components/Icons";
+import {  Icons } from "@/components/Icons";
 import { authOptions } from "@/lib/auth";
 import Image from "next/image";
 import { getServerSession } from "next-auth";
@@ -10,17 +10,12 @@ import { fetchRedis } from "@/helpers/redis";
 import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import SidebarChatList from "@/components/SidebarChatList";
 import MobileChatLayout from "@/components/MobileChatLayout";
+import { SidebarOpt } from "@/types/typings";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
 
-interface SidebarOpt {
-  id: number;
-  name: string;
-  href: string;
-  Icon: Icon;
-}
 
 const sidebarOpts: SidebarOpt[] = [
   {
@@ -29,6 +24,12 @@ const sidebarOpts: SidebarOpt[] = [
     href: "/dashboard/add",
     Icon: "UserPlus",
   },
+  {
+    id:2,
+    name: 'Video meetings',
+    href:'/dashboard/room',
+    Icon: 'VideoIcon'
+  }
 ];
 
 const Layout = async ({ children }: LayoutProps) => {

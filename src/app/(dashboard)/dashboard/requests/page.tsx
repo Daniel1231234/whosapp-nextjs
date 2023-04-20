@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
-const page = async () => {
+const Page = async () => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
@@ -32,4 +32,4 @@ const page = async () => {
   </main>
 };
 
-export default page;
+export default Page;

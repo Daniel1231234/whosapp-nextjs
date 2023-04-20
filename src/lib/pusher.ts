@@ -1,3 +1,4 @@
+import Pusher from 'pusher-js'
 import PusherServer from 'pusher'
 import PusherClient from 'pusher-js'
 
@@ -15,3 +16,9 @@ export const pusherClient = new PusherClient(
     cluster: 'eu',
   }
 )
+
+export const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_APP_KEY!, {
+  cluster: 'eu',
+  authEndpoint: '/api/pusher-auth',
+  forceTLS: true,
+});

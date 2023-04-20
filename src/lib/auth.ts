@@ -3,37 +3,27 @@ import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter";
 import { db } from "./db";
 import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from 'next-auth/providers/facebook';
-import { fetchRedis } from "@/helpers/redis";
+import { fetchRedis } from "@/helpers/redis"
 
-function getGoogleCredentials() {
-    const clientId = process.env.GOOGLE_CLIENT_ID
-    const clientSecret = process.env.GOOGLE_CLIENT_SECRET
+type Provider = 'google' | 'facebook'
+
+
+function getProviderCredentials(providerName: Provider) {
+    const clientId = providerName === 'google' ? process.env.GOOGLE_CLIENT_ID : process.env.FACEBOOK_CLIENT_ID
+    const clientSecret = providerName === 'google' ? process.env.GOOGLE_CLIENT_SECRET : process.env.FACEBOOK_CLIENT_SECRET
 
     if (!clientId || clientId.length === 0) {
-        throw new Error('Missing GOOGLE_CLIENT_ID')
+        throw new Error(`Missing ${providerName.toUpperCase()}_CLIENT_ID`)
     }
 
     if (!clientSecret || clientSecret.length === 0) {
-        throw new Error('Missing GOOGLE_CLIENT_SECRET')
+        throw new Error(`Missing ${providerName.toUpperCase()}_CLIENT_SECRET`)
     }
 
     return { clientId, clientSecret }
+
 }
 
-function getFacebookCredentials() {
-    const clientId = process.env.FACEBOOK_CLIENT_ID
-    const clientSecret = process.env.FACEBOOK_CLIENT_SECRET
-
-    if (!clientId || clientId.length === 0) {
-        throw new Error('Missing FACEBOOK_CLIENT_ID')
-    }
-
-    if (!clientSecret || clientSecret.length === 0) {
-        throw new Error('Missing FACEBOOK_CLIENT_SECRET')
-    }
-
-    return { clientId, clientSecret }
-}
 
 
 export const authOptions: NextAuthOptions = {
@@ -46,13 +36,13 @@ export const authOptions: NextAuthOptions = {
     },
     providers: [
         GoogleProvider({
-            clientId: getGoogleCredentials().clientId,
-            clientSecret: getGoogleCredentials().clientSecret
+            clientId: getProviderCredentials('google').clientId,
+            clientSecret: getProviderCredentials('google').clientSecret
         }),
         FacebookProvider({
-            clientId: getFacebookCredentials().clientId,
-            clientSecret: getFacebookCredentials().clientSecret
-          })
+            clientId: getProviderCredentials('facebook').clientId,
+            clientSecret: getProviderCredentials('facebook').clientSecret
+        })
     ],
     callbacks: {
         async jwt({ token, user }) {
