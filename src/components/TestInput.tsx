@@ -5,8 +5,10 @@ import TextareaAutosize from "react-textarea-autosize";
 import Button from "./UI/Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import { useTyping } from "@/hooks/useIsTyping";
 import CustomEmojiPicker from "./EmojiPicker";
-import { SmileIcon } from "lucide-react";
+import EmojiPicker from "emoji-picker-react";
+import { File, FileIcon, SendIcon, SmileIcon } from "lucide-react";
 
 interface ChatInputProps {
   chatPartner: User;
@@ -19,9 +21,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
   const [input, setInput] = useState<string>("");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
 
-  const onRecordingComplete = async (audioBlob: Blob) => {
-    console.log(audioBlob);
-  };
+  const { handleStartTyping, handleStopTyping } = useTyping();
 
   const sendMessage = async () => {
     if (!input) return;
@@ -39,14 +39,26 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
     }
   };
 
-  const handleEmojiClick = (emoji: string) => {
-    setInput((prev: string) => (prev += emoji));
+  const handleKeyPress = () => {
+    console.log("key press");
+    handleStartTyping(chatPartner.name);
   };
 
   return (
-    <div className="border-t border-gray-200 px-4 pt-4 mb-2 sm:mb-0 ">
-      <div className="relative overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
+    <div className="border-t border-gray-200 px-4 w-full">
+      <label className="relative block">
+        <div className="absolute inset-y-0 left-0 flex items-center pl-2 gap-1">
+          <button
+            onClick={(e: any) => {
+              e.preventDefault();
+            }}
+          >
+            <SendIcon className="h-5 w-5 fill-slate-300" />
+          </button>
+        </div>
+
         <TextareaAutosize
+          onKeyPress={handleKeyPress}
           ref={textareaRef}
           onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
@@ -58,33 +70,24 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={`Message ${chatPartner?.name}`}
-          className="block w-full resize-none border-0 bg-transparent  text-gray-900 placeholder:text-gray-400 placeholder:ml-3 focus:ring-0 sm:py-1.5 sm:text-sm sm:leading-6"
+          className="placeholder:italic placeholder:text-slate-400 block  bg-white w-full border border-slate-300 rounded-md py-2 pl-9 pr-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 sm:text-sm"
         />
 
-        <div
-          onClick={() => textareaRef.current?.focus()}
-          className="py-1 border-t-2"
-          aria-hidden="true"
-        >
-          <div className="py-px">
-            <div className="h-9" />
+        <div className="absolute inset-y-0 right-0 flex items-center pr-2 gap-1">
+          <div className="mx-2 px-0 py-4">
+            <button className="hover:bg-black hover:text-white">
+              <SmileIcon className="h-5 w-5 " />
+            </button>
+          </div>
+          
+          <div className=" px-0 py-4">
+            <button className="hover:bg-black hover:text-white">
+              <File className="h-5 w-5 " />
+            </button>
           </div>
         </div>
 
-        <div className="absolute right-0 bottom-0 flex  justify-between py-2 pl-3 pr-2">
-          <div className="flex-shrink-0 flex-row-reverse flex items-center justify-center gap-2 ">
-            <Button size="sm" isLoading={isLoading} onClick={sendMessage} type="submit">
-              Post
-            </Button>
-            <Button size="sm" variant="ghost" onClick={() => setOpenEmojiPicker(!openEmojiPicker)} className="w-full cursor-pointer">
-                <SmileIcon strokeWidth={2} color="gray" />
-            </Button>
-          </div>
-        </div>
-      </div>
-      {openEmojiPicker && (
-        <CustomEmojiPicker handleEmojiClick={handleEmojiClick} />
-      )}
+      </label>
     </div>
   );
 };

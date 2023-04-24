@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-const page = async ({}) => {
+const Page = async ({}) => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
@@ -69,8 +69,8 @@ const page = async ({}) => {
                 </div>
               </div>
               <div>
-                <h4 className='text-lg font-semibold'>{friend.name}</h4>
-                <p className='mt-1 max-w-md'>
+                <h4 className='text-lg dark:text-black font-semibold'>{friend.name}</h4>
+                <p className='mt-1 max-w-md  dark:text-black'>
                   <span className='text-zinc-400'>
                     {friend.pardesLastMsgs.senderId === session.user.id
                       ? 'You: '
@@ -84,10 +84,9 @@ const page = async ({}) => {
         ))
         )}
         <div>
-          {/* <VideoCall /> */}
         </div>
     </div>
   );
 };
 
-export default page;
+export default Page;

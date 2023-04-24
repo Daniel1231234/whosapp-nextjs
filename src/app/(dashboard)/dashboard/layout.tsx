@@ -11,6 +11,7 @@ import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import SidebarChatList from "@/components/SidebarChatList";
 import MobileChatLayout from "@/components/MobileChatLayout";
 import { SidebarOpt } from "@/types/typings";
+// import ButtonToggleDarkMode from "@/components/ToggleDarkMode";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -27,7 +28,7 @@ const sidebarOpts: SidebarOpt[] = [
   {
     id:2,
     name: 'Video meetings',
-    href:'/dashboard/room',
+    href:'/conference',
     Icon: 'VideoIcon'
   }
 ];
@@ -73,10 +74,10 @@ const Layout = async ({ children }: LayoutProps) => {
               <SidebarChatList friends={friends} sessionId={session.user.id} />
             </li>
             <li>
-              <div className="text-sm font-semibold leading-6 text-gray-400">
+              <div className="text-sm font-semibold leading-6 text-gray-700">
                 Overview
               </div>
-              <ul role="list" className="-mx-2 mt-2 space-y-1">
+              <ul role="list" className="-mx-2 mt-2 space-y-1 dark:text-gray-700">
                 {sidebarOpts.map((opt) => {
                   const Icon = Icons[opt.Icon];
                   return (
@@ -132,6 +133,7 @@ const Layout = async ({ children }: LayoutProps) => {
           </ul>
         </nav>
       </div>
+
       <aside  className='max-h-screen container py-16 md:py-12 w-full'>{children}</aside>
     </div>
   );

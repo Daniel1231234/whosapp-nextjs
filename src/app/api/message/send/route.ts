@@ -7,6 +7,7 @@ import { messageSchema, Message } from "@/lib/validation/message";
 import { nanoid } from "nanoid";
 import { getServerSession } from "next-auth";
 
+
 export async function POST(req: Request) {
   try {
     const { text, chatId }: { text: string; chatId: string } = await req.json();
@@ -29,7 +30,7 @@ export async function POST(req: Request) {
 
     const isFriend = friendList.includes(friendId);
 
-    if (!isFriend) return new Response("Unauthorized", { status: 401 });
+    if (!isFriend) return new Response("Unauthorized", { status: 401 })
 
     const rawSender = (await fetchRedis(
       "get",

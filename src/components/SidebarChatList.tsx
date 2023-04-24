@@ -2,7 +2,7 @@
 
 import { pusherClient } from "@/lib/pusher";
 import { chatHrefContructor, toPusherKey } from "@/lib/utils";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { FC, useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import UnseenChatToast from "./UnseenChatToast";
@@ -18,7 +18,6 @@ interface ExtendedMessage extends Message {
 }
 
 const SidebarChatList: FC<SidebarChatListProps> = ({ friends, sessionId }) => {
-  const router = useRouter();
   const path = usePathname();
   const [unseenMsgs, setUnseenMsgs] = useState<Message[]>([]);
   const [activeChats, setActiveChats] = useState<User[]>(friends);

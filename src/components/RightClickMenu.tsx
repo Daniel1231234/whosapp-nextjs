@@ -68,17 +68,17 @@ const RightClickMenu: FC<RightClickMenuProps> = ({
       <div
         ref={contextMenuRef}
         onClick={() => closeContextMenu()}
-        className="absolute z-10 max-w-56 bg-gray-200 text-gray-90 flex flex-col flex-nowrap justify-start items-center"
+        className="absolute z-10"
         style={style}
       >
-        <ul className="w-full rounded-lg border">
+        <ul className="flex flex-col bg-slate-200 rounded-sm shadow-md px-3 py-0">
           {menuData.map((item) => {
             const Icon = Icons[item.Icon];
             return (
               <li
                 onClick={handleClick}
                 key={item.id}
-                className=" flex items-center gap-2 justify-between border-b border-gray-300 px-8 py-2 hover:bg-slate-3000 cursor-pointer  hover:text-gray-200 hover:bg-indigo-600 "
+                className="border-none cursor-pointer py-2 pr-7 pl-4 w-full flex items-center relative color-[#000] transition hover:bg-[#f1f3f7] hover:color-[#4b00ff]"
               >
                 <span className="w-full inline-block">{item.name}</span>
                 <span>

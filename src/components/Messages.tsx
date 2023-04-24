@@ -35,7 +35,6 @@ const Messages: FC<MessagesProps> = ({
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [contextMenu, setContextMenu] = useState(initialContextMenu);
   const [msg, setMsg] = useState({ id: "", text: "" });
-
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -78,11 +77,10 @@ const Messages: FC<MessagesProps> = ({
 
   const removeMsg = async () => {
     try {
-      const res = await axios.post("/api/message/remove", {
+       await axios.post("/api/message/remove", {
         message: msg,
         chatId,
       });
-      console.log(res);
       toast.success("Message removed successfully");
     } catch (err) {
       if (err instanceof AxiosError) {
@@ -107,7 +105,7 @@ const Messages: FC<MessagesProps> = ({
   return (
     <div
       id="messages"
-      className="flex h-full flex-1 flex-col-reverse gap-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
+      className="flex dark:bg-bg-chat h-full flex-1 flex-col-reverse gap-4 p-3 overflow-y-auto scrollbar-thumb-blue scrollbar-thumb-rounded scrollbar-track-blue-lighter scrollbar-w-2 scrolling-touch"
     >
       <div ref={scrollDownRef} />
 
@@ -123,6 +121,7 @@ const Messages: FC<MessagesProps> = ({
       )}
 
       {messages.map((msg, idx) => {
+        const isVoiceMsg = msg.text.startsWith("blob");
         const isCurrUser = msg.senderId === sessionId;
         const hasNextMessageFromSameUser =
           messages[idx - 1]?.senderId === messages[idx].senderId;
@@ -147,22 +146,26 @@ const Messages: FC<MessagesProps> = ({
                   }
                 )}
               >
-                <span
-                  onContextMenu={(e) => openMenu(e, msg)}
-                  className={cn("px-4 py-2 rounded-lg inline-block", {
-                    "bg-indigo-600 text-white": isCurrUser,
-                    "bg-gray-200 text-gray-900": !isCurrUser,
-                    "rounded-br-none":
-                      !hasNextMessageFromSameUser && isCurrUser,
-                    "rounded-bl-none":
-                      !hasNextMessageFromSameUser && !isCurrUser,
-                  })}
-                >
-                  {msg.text}{" "}
-                  <span className="ml-2 text-sm text-gray-400">
-                    {formatTimeStamp(msg.createdAt)}
+                {isVoiceMsg ? (
+                  <audio src={msg.text} controls  onContextMenu={(e) => openMenu(e, msg)}></audio>
+                ) : (
+                  <span
+                    onContextMenu={(e) => openMenu(e, msg)}
+                    className={cn("px-4 py-2 rounded-lg inline-block", {
+                      "bg-indigo-600 text-white dark:bg-[#202C33]": isCurrUser,
+                      "bg-gray-200 text-gray-900 dark:bg-[#005C4B] dark:text-white ": !isCurrUser,
+                      "rounded-br-none":
+                        !hasNextMessageFromSameUser && isCurrUser,
+                      "rounded-bl-none":
+                        !hasNextMessageFromSameUser && !isCurrUser,
+                    })}
+                  >
+                    {msg.text}{" "}
+                    <span className="ml-2 text-sm text-gray-400">
+                      {formatTimeStamp(msg.createdAt)}
+                    </span>
                   </span>
-                </span>
+                )}
               </div>
 
               <div

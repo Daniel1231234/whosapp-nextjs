@@ -1,5 +1,5 @@
-import Providers from "../components/Providers";
 import "./globals.css";
+import Providers from "../components/Providers";
 
 export const metadata = {
   title: "WhosApp",
@@ -13,9 +13,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-      <div id="portal" />
-        <Providers>{children}</Providers>
+      <body className="dark:bg-gray-800 ">
+          <div id="portal" />
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );
