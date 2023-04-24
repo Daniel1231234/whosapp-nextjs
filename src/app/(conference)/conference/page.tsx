@@ -6,7 +6,6 @@ import {
   useHMSActions,
   useHMSStore,
 } from "@100mslive/react-sdk";
-import SignIn from "@/components/video/SignUpVideo";
 import Footer from "@/components/video/VideoFooter";
 import Conference from "@/components/video/Conference";
 
@@ -30,7 +29,7 @@ const Page = () => {
           <Footer />
         </>
       ) : (
-        <SignIn />
+        null
       )}
     </div>
   );

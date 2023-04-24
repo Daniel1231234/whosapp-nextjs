@@ -28,7 +28,7 @@ const sidebarOpts: SidebarOpt[] = [
   {
     id:2,
     name: 'Video meetings',
-    href:'/conference',
+    href:'/dashboard/lobby',
     Icon: 'VideoIcon'
   }
 ];

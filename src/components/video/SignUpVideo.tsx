@@ -1,14 +1,22 @@
+'use client'
+
 import { useState } from "react";
 import { useHMSActions } from "@100mslive/react-sdk";
-import Button from "../UI/Button";
+import Button from "../UI/Button"
+import { useRouter } from "next/navigation";
+
+interface SignInVideoProps {
+  userName:string | null | undefined
+  userId:string
+}
 
 
-const SignInVideo = () => {
+const SignInVideo = ({userName, userId}:SignInVideoProps) => {
   const endpoint = process.env.NEXT_PUBLIC_TOKEN_ENDPOINT;
   const [selectValues, setSelectValues] = useState("guest");
   const hmsActions = useHMSActions();
-  const [inputValues, setInputValues] = useState<string>('');
-
+  const [inputValues, setInputValues] = useState<string>(userName ? userName : "");
+  const router = useRouter()
 
   const joinRoom = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,7 +25,7 @@ const SignInVideo = () => {
       const response = await fetch(`${endpoint}api/token`, {
         method: "POST",
         body: JSON.stringify({
-          user_id: "1234",
+          user_id: userId,
           role: selectValues, 
           type: "app",
           room_id: process.env.NEXT_PUBLIC_ROOM_ID,
@@ -35,6 +43,8 @@ const SignInVideo = () => {
         isAudioMuted: true,
       },
     });
+
+    if (token) router.push('/conference')
   };
 
 
