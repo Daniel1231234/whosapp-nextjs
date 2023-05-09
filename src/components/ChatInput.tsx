@@ -44,7 +44,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
   };
 
   return (
-    <div className="border-t border-gray-200 px-4 pt-4 mb-2 sm:mb-0 ">
+    <div className="border-t dark:border-transparent border-gray-200 px-4 pt-4 mb-2 sm:mb-0 ">
       <div className="relative overflow-hidden rounded-lg shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600">
         <TextareaAutosize
           ref={textareaRef}
@@ -58,12 +58,12 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder={`Message ${chatPartner?.name}`}
-          className="block w-full resize-none border-0 bg-transparent  text-gray-900 placeholder:text-gray-400 placeholder:ml-3 focus:ring-0 sm:py-1.5 sm:text-sm sm:leading-6"
+          className="block w-full dark:text-gray-50 resize-none border-0 bg-transparent  text-gray-900 placeholder:text-gray-400 placeholder:ml-3 focus:ring-0 sm:py-1.5 sm:text-sm sm:leading-6"
         />
 
         <div
           onClick={() => textareaRef.current?.focus()}
-          className="py-1 border-t-2"
+          className="py-1 dark:border-transparent border-t-2"
           aria-hidden="true"
         >
           <div className="py-px">

@@ -12,12 +12,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="dark:bg-gray-800 ">
-          <div id="portal" />
-        <Providers>
-          {children}
-        </Providers>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <div id="portal" />
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

@@ -38,6 +38,8 @@ const Page = async ({ params }: PageProps) => {
   const { user } = session;
   const [userId1, userId2] = chatId.split("--");
 
+  const demoImg = `https://robohash.org/${session.user.id}`
+
   if (user.id !== userId1 && user.id !== userId2) {
     notFound();
   }
@@ -54,14 +56,14 @@ const Page = async ({ params }: PageProps) => {
 
   return (
     <div className="flex-1  justify-between flex flex-col h-full max-h-[calc(100vh - 6rem)] relative">
-      <div className="flex sm:items-center justify-between py-3 border-b-2 border-gray-200">
+      <div className="flex sm:items-center justify-between py-3 dark:border-transparent border-b-2 border-gray-200">
         <div className="relative flex items-center space-x-4">
           <div className="relative ">
             <div className="relative w-8 sm:w-12 h-8 sm:h-12">
               <Image
                 fill
                 referrerPolicy="no-referrer"
-                src={chatPartner?.image}
+                src={chatPartner.image ? chatPartner.image : demoImg}
                 alt={`${chatPartner?.name} profile picture`}
                 className="rounded-full"
                 sizes="(max-width: 768px) 100vw,

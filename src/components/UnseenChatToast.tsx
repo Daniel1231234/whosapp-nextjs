@@ -20,6 +20,7 @@ const UnseenChatToast: FC<UnseenChatToastProps> = ({
   senderName,
   senderMessage,
 }) => {
+  
   return (
     <div
       className={cn(

@@ -1,9 +1,7 @@
-"use client"
 
-import { signOut } from 'next-auth/react'
 
 const Home = () => {
-  return <button onClick={() => signOut()}>Sign out</button>
+  return <>Home</>
 }
 
 export default Home

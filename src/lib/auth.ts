@@ -5,7 +5,7 @@ import GoogleProvider from "next-auth/providers/google"
 import FacebookProvider from 'next-auth/providers/facebook';
 import { fetchRedis } from "@/helpers/redis"
 
-type Provider = 'google' | 'facebook'
+type Provider = 'google' | 'facebook' | 'credentials'
 
 
 function getProviderCredentials(providerName: Provider) {
@@ -23,7 +23,6 @@ function getProviderCredentials(providerName: Provider) {
     return { clientId, clientSecret }
 
 }
-
 
 
 export const authOptions: NextAuthOptions = {
@@ -47,7 +46,6 @@ export const authOptions: NextAuthOptions = {
     callbacks: {
         async jwt({ token, user }) {
             const dbUserRes = await fetchRedis('get', `user:${token.id}`) as string | null
-
             if (!dbUserRes) {
                 if (user) token.id = user!.id
                 return token

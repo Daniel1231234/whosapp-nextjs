@@ -1,4 +1,4 @@
-import {  Icons } from "@/components/Icons";
+import { Icons } from "@/components/Icons";
 import { authOptions } from "@/lib/auth";
 import Image from "next/image";
 import { getServerSession } from "next-auth";
@@ -11,12 +11,11 @@ import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import SidebarChatList from "@/components/SidebarChatList";
 import MobileChatLayout from "@/components/MobileChatLayout";
 import { SidebarOpt } from "@/types/typings";
-// import ButtonToggleDarkMode from "@/components/ToggleDarkMode";
+import ButtonToggleDarkMode from "@/components/ToggleDarkMode";
 
 interface LayoutProps {
   children: React.ReactNode;
 }
-
 
 const sidebarOpts: SidebarOpt[] = [
   {
@@ -25,12 +24,12 @@ const sidebarOpts: SidebarOpt[] = [
     href: "/dashboard/add",
     Icon: "UserPlus",
   },
-  {
-    id:2,
-    name: 'Video meetings',
-    href:'/dashboard/lobby',
-    Icon: 'VideoIcon'
-  }
+  // {
+  //   id: 2,
+  //   name: "Personal Settings",
+  //   href: "/dashboard/setting",
+  //   Icon: "SettingsIcon",
+  // },
 ];
 
 const Layout = async ({ children }: LayoutProps) => {
@@ -39,16 +38,19 @@ const Layout = async ({ children }: LayoutProps) => {
 
   const friends = await getFriendsByUserId(session.user.id);
 
-  const unseenReqCount =  (
+  const SettingIcon = Icons['SettingsIcon']
+
+  const unseenReqCount = (
     (await fetchRedis(
-      'smembers',
+      "smembers",
       `user:${session.user.id}:incoming_friend_requests`
     )) as User[]
-  ).length
+  ).length;
 
   return (
     <div className="w-full flex h-screen">
-       <div className='md:hidden'>
+      <ButtonToggleDarkMode />
+      <div className="md:hidden">
         <MobileChatLayout
           friends={friends}
           session={session}
@@ -56,17 +58,17 @@ const Layout = async ({ children }: LayoutProps) => {
           unseenRequestCount={unseenReqCount}
         />
       </div>
-      
-      <div className="hidden md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
-        <Link href="/dashboard" className="flex h-16 shrink-0 items-center">
-          <Icons.Logo className="h-8 w-auto text-indigo-600" />
+
+      <div className="hidden dark:bg-slate-800  md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 dark:border-none bg-white px-6">
+        <Link href="/dashboard" className="flex  h-16 shrink-0 items-center">
+          <Icons.Logo className="h-8   w-auto text-indigo-600" />
         </Link>
 
-        {friends.length > 0 ? (
+        {friends.length > 0 && (
           <div className="text-xs font-semibold leading-6 text-green-400 ">
             Your chats
           </div>
-        ) : null}
+        )}
 
         <nav className="flex flex-1 flex-col">
           <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -74,22 +76,22 @@ const Layout = async ({ children }: LayoutProps) => {
               <SidebarChatList friends={friends} sessionId={session.user.id} />
             </li>
             <li>
-              <div className="text-sm font-semibold leading-6 text-gray-700">
+              <div className="text-sm font-semibold leading-6 text-gray-700 dark:text-gray-50">
                 Overview
               </div>
-              <ul role="list" className="-mx-2 mt-2 space-y-1 dark:text-gray-700">
+              <ul role="list" className="-mx-2 mt-2 space-y-1   ">
                 {sidebarOpts.map((opt) => {
                   const Icon = Icons[opt.Icon];
                   return (
                     <li key={opt.id}>
                       <Link
                         href={opt.href}
-                        className="text-grey-700 hover:text-indigo-600 hover:bg-gray-50 group flex gap-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                        className="text-gray-700  hover:text-indigo-600 hover:bg-gray-50 group flex gap-3 rounded-md p-2 text-sm leading-6 font-semibold dark:hover:text-gray-900 dark:text-gray-50"
                       >
-                        <span className="text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
+                        <span className="text-gray-400  border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
                           <Icon className="h-4 w-4" />
                         </span>
-                        <span className="truncate">{opt.name}</span>
+                        <span className="truncate ">{opt.name}</span>
                       </Link>
                     </li>
                   );
@@ -100,6 +102,17 @@ const Layout = async ({ children }: LayoutProps) => {
                     sessionId={session.user.id}
                   />
                 </li>
+                {/* <li>
+                  <Link
+                    href={`/dashboard/setting/${session.user.id}`}
+                    className="text-gray-700  hover:text-indigo-600 hover:bg-gray-50 group flex gap-3 rounded-md p-2 text-sm leading-6 font-semibold dark:hover:text-gray-900 dark:text-gray-50"
+                  >
+                    <span className="text-gray-400  border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
+                      <SettingIcon className="h-4 w-4" />
+                    </span>
+                    <span className="truncate">Personal Settings</span>
+                  </Link>
+                </li> */}
               </ul>
             </li>
 
@@ -121,8 +134,10 @@ const Layout = async ({ children }: LayoutProps) => {
 
                 <span className="sr-only">Your profile</span>
                 <div className="flex flex-col">
-                  <span aria-hidden="true">{session.user.name}</span>
-                  <span className="text-xs text-zinc-400" aria-hidden="true">
+                  <span aria-hidden="true" className="dark:text-gray-50">
+                    {session.user.name}
+                  </span>
+                  <span className="text-xs text-zinc-400 " aria-hidden="true">
                     {session.user.email}
                   </span>
                 </div>
@@ -134,7 +149,9 @@ const Layout = async ({ children }: LayoutProps) => {
         </nav>
       </div>
 
-      <aside  className='max-h-screen container py-16 md:py-12 w-full'>{children}</aside>
+      <aside className="max-h-screen container py-16 md:py-12 w-full">
+        {children}
+      </aside>
     </div>
   );
 };

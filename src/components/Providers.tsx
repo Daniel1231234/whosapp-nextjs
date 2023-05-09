@@ -1,8 +1,8 @@
 "use client";
 
+import { ThemeProvider } from "next-themes";
 import { FC } from "react";
 import { Toaster } from "react-hot-toast";
-import { HMSRoomProvider } from "@100mslive/react-sdk";
 
 interface ProvidersProps {
   children: React.ReactNode;
@@ -11,8 +11,10 @@ interface ProvidersProps {
 const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
     <>
-      <Toaster position="top-center" reverseOrder={false} />
-      <HMSRoomProvider>{children}</HMSRoomProvider>
+      <ThemeProvider attribute="class">
+        <Toaster position="top-center" reverseOrder={false} />
+        {children}
+      </ThemeProvider>
     </>
   );
 };

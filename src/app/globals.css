@@ -8,14 +8,19 @@
   container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
-  /* body {
-    @apply dark:bg-gray-800
-  } */
+  body {
+    @apply bg-gray-50 text-slate-500 dark:bg-slate-900 dark:text-slate-400;
+  }
 }
+
+
 
 .scrollbar-w-2::-webkit-scrollbar {
   width: 0.25rem;
   height: 0.25rem;
+}
+.dark .scrollbar-w-2::-webkit-scrollbar  {
+  width:0;
 }
 
 .scrollbar-track-blue-lighter::-webkit-scrollbar-track {

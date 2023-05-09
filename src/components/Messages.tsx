@@ -37,6 +37,9 @@ const Messages: FC<MessagesProps> = ({
   const [msg, setMsg] = useState({ id: "", text: "" });
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
 
+  const demoImg = `https://robohash.org/${sessionId}`
+  
+
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`chat:${chatId}`));
 
@@ -177,7 +180,7 @@ const Messages: FC<MessagesProps> = ({
               >
                 <Image
                   fill
-                  src={isCurrUser ? (sessionImg as string) : chatPartner.image}
+                  src={isCurrUser ? (sessionImg as string ? sessionImg as string : demoImg) : (chatPartner.image ? chatPartner.image : demoImg)}
                   alt="Profile picture"
                   referrerPolicy="no-referrer"
                   className="rounded-full"
