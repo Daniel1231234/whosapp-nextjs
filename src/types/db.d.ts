@@ -1,8 +1,14 @@
 interface User {
+    id:string
     name:string
     email:string
+    password:string
     image:string
-    id:string
+    username?:string
+    country?:string
+    street?:string
+    notification?: {message?:boolean, friendReq?:boolean}
+    provider?:string
 }
 
 interface Chat {

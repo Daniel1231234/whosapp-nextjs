@@ -8,14 +8,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
-const Page = async ({}) => {
+const Page = async () => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
   const demoImg = `https://robohash.org/${session.user.id}`
-
   const friends = getFriendsByUserId(session.user.id);
-
   const friendsWithLastMsg = await Promise.all(
     (
       await friends

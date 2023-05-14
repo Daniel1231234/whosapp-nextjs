@@ -13,6 +13,11 @@ declare module 'next-auth' {
     interface Session {
         user:User & {
             id:UserId
+            username?:string | unknown
+            country?:string | unknown
+            street?:string | unknown
+            provider?:string | unknown
+            notification?: { message: boolean, friendReq: boolean } | unknown
         }
     }
 }

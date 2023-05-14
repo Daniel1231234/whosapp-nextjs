@@ -63,7 +63,7 @@ const Page = async ({ params }: PageProps) => {
               <Image
                 fill
                 referrerPolicy="no-referrer"
-                src={chatPartner.image ? chatPartner.image : demoImg}
+                src={chatPartner?.image ? chatPartner?.image : demoImg}
                 alt={`${chatPartner?.name} profile picture`}
                 className="rounded-full"
                 sizes="(max-width: 768px) 100vw,

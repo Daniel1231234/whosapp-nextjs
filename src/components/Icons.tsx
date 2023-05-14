@@ -6,6 +6,7 @@ import {
   CopyIcon,
   VideoIcon,
   SettingsIcon,
+  MessageCircle,
 } from "lucide-react";
 
 export const Icons = {
@@ -18,6 +19,7 @@ export const Icons = {
     </svg>
   ),
   UserPlus,
+  MessageCircle,
   SettingsIcon,
   Gamepad2Icon,
   DeleteIcon,

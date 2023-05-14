@@ -13,6 +13,7 @@ import { Session } from "next-auth";
 import { SidebarOpt } from "@/types/typings";
 import { usePathname } from "next/navigation";
 import FriendRequestSidebarOpt from "./FriendRequestSidebarOpt";
+import ButtonToggleDarkMode from "./ToggleDarkMode";
 
 interface MobileChatLayoutProps {
   friends: User[];
@@ -31,7 +32,6 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
 
   const pathname = usePathname();
 
-  const demoImg = `https://robohash.org/${session.user.id}`
 
   useEffect(() => {
     setOpen(false);
@@ -143,7 +143,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
                                     fill
                                     referrerPolicy="no-referrer"
                                     className="rounded-full"
-                                    src={session.user.image || demoImg}
+                                    src={session.user.image || ""}
                                     alt="Your profile picture"
                                     sizes="(max-width: 768px) 100vw,
                                     (max-width: 1200px) 50vw,
@@ -173,7 +173,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
                           </ul>
                         </nav>
 
-                        {/* content end */}
+                        <ButtonToggleDarkMode className="absolute bottom-0 left-4 md:hidden" />
                       </div>
                     </div>
                   </Dialog.Panel>

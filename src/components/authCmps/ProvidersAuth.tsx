@@ -1,4 +1,3 @@
-import { FacebookIcon } from "lucide-react";
 import Button from "../UI/Button";
 import { Icons } from "../Icons";
 
@@ -20,7 +19,7 @@ const ProvidersAuth = ({
       <Button
         isLoading={isLoading}
         type="button"
-        className="max-w-sm mx-auto w-full"
+        className="max-w-sm mx-auto w-3/5"
         onClick={loginWithGoogle}
       >
         {isLoading ? null : (
@@ -58,7 +57,7 @@ const ProvidersAuth = ({
 
       <Button
         type="button"
-        className="max-w-sm mx-auto w-full"
+        className="max-w-sm mx-auto w-3/5"
         onClick={loginWithFacebook}
       >
         
