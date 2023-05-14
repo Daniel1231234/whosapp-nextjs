@@ -15,7 +15,7 @@ const ImageUploader = () => {
   const [url, setUrl] = useState<string | null>(null);
   const [error, setError] = useState(false);
 
-  const uploadImage = async (image: File) => {
+  const uploadImage = useCallback(async (image: File) => {
     setError(false);
     setIsPending(true);
     const formData = new FormData();
@@ -40,7 +40,7 @@ const ImageUploader = () => {
     //   setIsPending(false);
     //   setError(true);
     // }
-  };
+  }, [])
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {

@@ -79,7 +79,7 @@ const Page: FC = () => {
                 loginWithGoogle={loginWithGoogle}
               />
               <p className="text-center mt-4 text-gray-600">
-                Don't have an account?{" "}
+                {"Don't have an account?"}
                 <button
                   className="text-blue-500"
                   onClick={() => setIsSign(false)}

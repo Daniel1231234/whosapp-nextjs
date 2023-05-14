@@ -26,7 +26,6 @@ const MainChat = ({ initialMessages, chatId }: MainChatProps) => {
   const scrollDownRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log(initialMessages)
     pusherClient.subscribe(toPusherKey(`chat:${chatId}`));
 
     const messageHandler = (twoMessages: GptMessageType[]) => {
