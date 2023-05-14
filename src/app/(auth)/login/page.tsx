@@ -28,7 +28,8 @@ const Page: FC = () => {
       await signIn("credentials", {
         email: userCred.email,
         password: userCred.password,
-        // redirect: true,
+        // callbackUrl: `${window.location.origin}/dashboard`,
+        redirect: true,
       });
     } catch (err) {
       toast.error("Something went wrong with your login.");

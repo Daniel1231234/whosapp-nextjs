@@ -26,7 +26,7 @@ function getProviderCredentials(providerName: Provider) {
 
 }
 
-const API = process.env.NODE_ENV === 'production' ? "https://whosapp-nextjs.vercel.app/api/login" : "http://localhost:3000/api/login"
+// const API = process.env.NODE_ENV === 'production' ? "https://whosapp-nextjs.vercel.app/api/login" : "http://localhost:3000/api/login"
 
 export const authOptions: NextAuthOptions = {
     adapter: UpstashRedisAdapter(db),
@@ -53,14 +53,13 @@ export const authOptions: NextAuthOptions = {
             },
             async authorize(credentials, req) {
                 try {
-                    const res = await axios.post(API, credentials)
-                    // console.log(res)
+                    const apiUrl = process.env.NODE_ENV === 'production' ? "https://whosapp-nextjs.vercel.app/api/login" : "http://localhost:3000/api/login";
+
+                    const res = await axios.post(apiUrl, credentials)
                     const user = res.data
-                    console.log(user)
                     if ( user ) return user
                     else return null
                 } catch (err) {
-                    // console.log('huge error')
                     console.log(err)
                 }
             },
@@ -68,27 +67,27 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async jwt({ token, user }) {
+            return Promise.resolve(token)
+            // const dbUserfromProviders = await fetchRedis('get', `user:${token.id}`) as string | null
 
-            const dbUserfromProviders = await fetchRedis('get', `user:${token.id}`) as string | null
+            // if (!dbUserfromProviders) {
+            //     if (user) token.id = user!.id
+            //     return token
+            // }
 
-            if (!dbUserfromProviders) {
-                if (user) token.id = user!.id
-                return token
-            }
-
-            const dbUser = JSON.parse(dbUserfromProviders) as User
-
-            return {
-                id: dbUser.id,
-                name: dbUser.name,
-                email: dbUser.email,
-                picture: dbUser.image ? dbUser.image :  `https://robohash.org/${dbUser.id}`,
-                username:dbUser.username,
-                country:dbUser.country,
-                street:dbUser.street,
-                notification:dbUser.notification,
-                provider:dbUser.provider
-            }
+            // const dbUser = JSON.parse(dbUserfromProviders) as User
+            
+            // return {
+            //     id: dbUser.id,
+            //     name: dbUser.name,
+            //     email: dbUser.email,
+            //     picture: dbUser.image ? dbUser.image :  `https://robohash.org/${dbUser.id}`,
+            //     username:dbUser.username,
+            //     country:dbUser.country,
+            //     street:dbUser.street,
+            //     notification:dbUser.notification,
+            //     provider:dbUser.provider
+            // }
         },
         async session({ session, token }) {
             if (token) {
@@ -105,9 +104,9 @@ export const authOptions: NextAuthOptions = {
 
             return session
         },
-        redirect() {
-            return '/dashboard'
-        }
+        // redirect() {
+        //     return '/dashboard'
+        // }
     }
 }
 
