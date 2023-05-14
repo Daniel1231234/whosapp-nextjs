@@ -26,7 +26,7 @@ function getProviderCredentials(providerName: Provider) {
 
 }
 
-const API = process.env.NODE_ENV === 'production' ? "/api/login" : "http://localhost:3000/api/login"
+const API = process.env.NODE_ENV === 'production' ? "https://whosapp-nextjs.vercel.app/api/login" : "http://localhost:3000/api/login"
 
 export const authOptions: NextAuthOptions = {
     adapter: UpstashRedisAdapter(db),
