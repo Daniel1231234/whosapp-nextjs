@@ -22,8 +22,15 @@ const firstMessage = [{
 }]
 
 const MainChat = ({ initialMessages, chatId }: MainChatProps) => {
-  const [messages, setMessages] = useState<GptMessageType[]>(initialMessages ? initialMessages : firstMessage);
-  const scrollDownRef = useRef<HTMLDivElement | null>(null);
+  const [messages, setMessages] = useState<GptMessageType[]>(initialMessages);
+  const scrollDownRef = useRef<HTMLDivElement | null>(null)
+
+  useEffect(() => {
+    if (!messages || messages.length === 0) {
+      setMessages(firstMessage)
+    }
+  }, [])
+
 
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`chat:${chatId}`));

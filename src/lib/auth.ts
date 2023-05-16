@@ -26,8 +26,6 @@ function getProviderCredentials(providerName: Provider) {
 
 }
 
-// const API = process.env.NODE_ENV === 'production' ? "https://whosapp-nextjs.vercel.app/api/login" : "http://localhost:3000/api/login"
-
 export const authOptions: NextAuthOptions = {
     adapter: UpstashRedisAdapter(db),
     session: {
@@ -39,7 +37,23 @@ export const authOptions: NextAuthOptions = {
     providers: [
         GoogleProvider({
             clientId: getProviderCredentials('google').clientId,
-            clientSecret: getProviderCredentials('google').clientSecret
+            clientSecret: getProviderCredentials('google').clientSecret,
+            profile(profile, tokens) {
+                console.log('tokens => ', tokens)
+                console.log('profile => ', profile)
+
+                return {
+                    id: profile.sub,
+                    name: profile.name,
+                    email: profile.email,
+                    image: profile.picture,
+                    username: profile.username ?? `USERNAME ${profile.name}`,
+                    country: profile.country ?? 'israel',
+                    street: profile.street ?? "ההגנה 30",
+                    notification: profile.notification ?? { friendReq: false, message: false },
+                    provider: 'Google'
+                }
+            },
         }),
         FacebookProvider({
             clientId: getProviderCredentials('facebook').clientId,
@@ -48,16 +62,17 @@ export const authOptions: NextAuthOptions = {
         CredentialsProvider({
             name: 'Credentials',
             credentials: {
-                email: { label: "Email", type: "email", placeholder: "Noakirel@example.com" },
-                password: { label: "Password", type: "password" },
+                email: {},
+                password: {},
             },
             async authorize(credentials, req) {
                 try {
-                    const apiUrl = process.env.NODE_ENV === 'production' ? "https://whosapp-nextjs.vercel.app/api/login" : "http://localhost:3000/api/login";
+                    const apiUrl = process.env.VERCEL_ENV === 'production' ? `https://${process.env.VERCEL_URL}/api/login` : "http://localhost:3000/api/login";
 
                     const res = await axios.post(apiUrl, credentials)
+                    // console.log('result from login => ', res)
                     const user = res.data
-                    if ( user ) return user
+                    if (user) return user
                     else return null
                 } catch (err) {
                     console.log(err)
@@ -67,46 +82,50 @@ export const authOptions: NextAuthOptions = {
     ],
     callbacks: {
         async jwt({ token, user }) {
-            return Promise.resolve(token)
-            // const dbUserfromProviders = await fetchRedis('get', `user:${token.id}`) as string | null
+            const dbUserResult = (await fetchRedis('get', `user:${token.id}`)) as
+                | string
+                | null
 
-            // if (!dbUserfromProviders) {
-            //     if (user) token.id = user!.id
-            //     return token
-            // }
+            if (!dbUserResult) {
+                if (user) {
+                    token.id = user!.id
+                }
+                return token
+            }
 
-            // const dbUser = JSON.parse(dbUserfromProviders) as User
-            
-            // return {
-            //     id: dbUser.id,
-            //     name: dbUser.name,
-            //     email: dbUser.email,
-            //     picture: dbUser.image ? dbUser.image :  `https://robohash.org/${dbUser.id}`,
-            //     username:dbUser.username,
-            //     country:dbUser.country,
-            //     street:dbUser.street,
-            //     notification:dbUser.notification,
-            //     provider:dbUser.provider
-            // }
+            const dbUser = JSON.parse(dbUserResult) as User
+
+            return {
+                id: dbUser.id,
+                name: dbUser.name,
+                email: dbUser.email,
+                picture: dbUser.image,
+                username: dbUser.username,
+                country: dbUser.country,
+                street: dbUser.street,
+                notification: dbUser.notification,
+                provider: dbUser.provider
+            }
         },
         async session({ session, token }) {
+
             if (token) {
                 session.user.id = token.id
-                session.user.name = token.name
-                session.user.email = token.email
-                session.user.image = token.picture
-                session.user.username = token.username
-                session.user.country = token.country
-                session.user.street = token.street
-                session.user.notification = token.notification
-                session.user.provider = token.picture?.startsWith("https://lh3.googleusercontent.com") ? "Google" : ""
+                session.user.name = token.name!
+                session.user.email = token.email!
+                session.user.image = token.picture!
+                session.user.username = token.username!
+                session.user.country = token.country!
+                session.user.street = token.street!
+                session.user.notification = token.notification!
+                session.user.provider = token.provider!
             }
 
             return session
         },
-        // redirect() {
-        //     return '/dashboard'
-        // }
+        redirect() {
+            return '/dashboard'
+        }
     }
 }
 

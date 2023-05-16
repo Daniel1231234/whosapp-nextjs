@@ -4,11 +4,11 @@ interface User {
     email:string
     password:string
     image:string
-    username?:string
-    country?:string
-    street?:string
-    notification?: {message?:boolean, friendReq?:boolean}
-    provider?:string
+    username:string
+    country:string
+    street:string
+    notification: {message?:boolean, friendReq?:boolean}
+    provider:string
 }
 
 interface Chat {

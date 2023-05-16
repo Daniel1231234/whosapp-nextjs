@@ -9,6 +9,8 @@ const Page = async ({}: PageProps) => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
+  // console.log('session => ', session)
+
   return (
     <div className="h-full mx-auto overflow-auto">
       <ProfileSection user={session.user as User} />

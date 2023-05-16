@@ -19,7 +19,12 @@ export async function POST(request: Request) {
             name: body.name,
             email: body.email,
             password: await bcrypt.hash(body.password, 10),
-            image: ""
+            image: "/avatar.png",
+            username:`${body.name}-USERNAME`,
+            country: 'Israel',
+            street: 'ההגנה 15',
+            notification: {friendReq:false, message:false},
+            provider: 'credentials'
         }
 
         await Promise.all([

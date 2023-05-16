@@ -42,7 +42,7 @@ const Layout = async ({ children }: LayoutProps) => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
-  // console.log('session => ', session)
+  // console.log("session => ", session);
 
   const friends = await getFriendsByUserId(session.user.id);
 
@@ -117,15 +117,12 @@ const Layout = async ({ children }: LayoutProps) => {
               <li className="-mx-6 mt-auto flex items-center">
                 <ButtonToggleDarkMode className="absolute bottom-20 left-4" />
                 <div className="flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 ">
-                  <div className="relative h-8 w-8 bg-gray-50 ">
+                  <div className="relative h-8 w-8 ">
                     <Image
                       fill
                       referrerPolicy="no-referrer"
                       className="rounded-full"
-                      src={
-                        session?.user.image ||
-                        `https://i.pravatar.cc/300?u=${Date.now().toLocaleString()}`
-                      }
+                      src={session.user.image!}
                       alt="Your profile picture"
                       sizes="(max-width: 768px) 100vw,
                             (max-width: 1200px) 50vw,

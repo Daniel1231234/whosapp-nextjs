@@ -25,12 +25,12 @@ const Page: FC = () => {
         toast.error("Something went wrong with your credentails :(");
         return;
       }
-      await signIn("credentials", {
+     await signIn("credentials", {
         email: userCred.email,
         password: userCred.password,
-        // callbackUrl: `${window.location.origin}/dashboard`,
+        callbackUrl: `${window.location.origin}/dashboard`,
         redirect: true,
-      });
+      })
     } catch (err) {
       toast.error("Something went wrong with your login.");
     }

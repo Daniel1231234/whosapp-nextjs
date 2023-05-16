@@ -13,30 +13,30 @@ export async function POST(req: Request) {
     try {
         const session = await getServerSession(authOptions)
         if (!session) return new Response("Unauthorized", { status: 401 })
-        const {message, chatId}:{message:string, chatId:string} = await req.json()
+        const { message, chatId }: { message: string, chatId: string } = await req.json()
 
-          const timestamp = Date.now()
+        const timestamp = Date.now()
 
-          const newMessage = {
-            id:nanoid(),
-            role:'user',
-            text:message,
-            createdAt:timestamp
-          }
+        const newMessage = {
+            id: nanoid(),
+            role: 'user',
+            text: message,
+            createdAt: timestamp
+        }
 
 
         const response = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
-            messages: [{role: "user", content: message}],
+            messages: [{ role: "user", content: message }],
         })
         const gptResponse = response.data.choices[0].message?.content
         const gptTimeStamp = Date.now()
 
         const resMessage = {
-            id:nanoid(),
-            role:'gpt',
-            text:gptResponse,
-            createdAt:gptTimeStamp
+            id: nanoid(),
+            role: 'gpt',
+            text: gptResponse,
+            createdAt: gptTimeStamp
         }
 
         const twoMessages = [newMessage, resMessage]
@@ -45,16 +45,16 @@ export async function POST(req: Request) {
             toPusherKey(`chat:${chatId}`),
             "incoming-message",
             twoMessages
-          )
+        )
 
         await Promise.all([
             db.zadd(`chat:${chatId}:messages`, {
-                score:timestamp,
-                member:JSON.stringify(newMessage)
+                score: timestamp,
+                member: JSON.stringify(newMessage)
             }),
             db.zadd(`chat:${chatId}:messages`, {
-                score:gptTimeStamp,
-                member:JSON.stringify(resMessage)
+                score: gptTimeStamp,
+                member: JSON.stringify(resMessage)
             }),
         ])
 
@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     } catch (err) {
         if (err instanceof AxiosError) {
             console.log('axios scope => ', err)
-            return new Response(err.response?.data, {status:400})
+            return new Response(err.response?.data, { status: 400 })
         }
         console.log('err => ', err)
         return new Response('Something went wrong', { status: 500 })
