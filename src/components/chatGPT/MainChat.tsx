@@ -14,23 +14,12 @@ interface MainChatProps {
   chatId: string;
 }
 
-const firstMessage = [{
-  id:'abcdefg',
-  role:'gpt',
-  text:'Hello! how can i help you today?',
-  createdAt:Date.now()
-}]
+
 
 const MainChat = ({ initialMessages, chatId }: MainChatProps) => {
+  
   const [messages, setMessages] = useState<GptMessageType[]>(initialMessages);
   const scrollDownRef = useRef<HTMLDivElement | null>(null)
-
-  useEffect(() => {
-    if (!messages || messages.length === 0) {
-      setMessages(firstMessage)
-    }
-  }, [])
-
 
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`chat:${chatId}`));

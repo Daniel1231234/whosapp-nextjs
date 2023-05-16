@@ -7,6 +7,12 @@ import { getServerSession } from "next-auth";
 import { notFound } from "next/navigation";
 
 async function getChatMessages(chatId: string) {
+  const firstMessage = {
+    id:'abcdefg',
+    role:'gpt',
+    text:"היי! אני ג'פטה, איך אני יכול לעזור לך היום?",
+    createdAt:Date.now()
+  }
   try {
     const res: string[] = await fetchRedis(
       "zrange",
@@ -17,7 +23,8 @@ async function getChatMessages(chatId: string) {
     const dbMessages = res.map((msg) => JSON.parse(msg) as Message);
     const reversedDbMessages = dbMessages.reverse();
     const messages = gptMessageArraySchema.parse(reversedDbMessages);
-    return messages as GptMessageType[]
+    const msgsWithFirstMsg = [...messages, firstMessage]
+    return msgsWithFirstMsg as GptMessageType[]
   } catch (err) {
     notFound();
   }
