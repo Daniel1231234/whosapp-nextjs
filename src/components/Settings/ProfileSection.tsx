@@ -1,4 +1,5 @@
 "use client";
+
 import { getInitialFormValues } from "@/helpers/user-settings";
 import ImageUploader from "./ImageUpload";
 import { useState } from "react";
@@ -12,7 +13,7 @@ interface IProfilePageProps {
 
 const ProfileSection = ({ user }: IProfilePageProps) => {
   const initialFormValues = getInitialFormValues(user);
-  const [formData, setFormData] = useState<User>(initialFormValues);
+  const [formData, setFormData] = useState<User | any>(initialFormValues);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
 
-    setFormData((prevData) => ({
+    setFormData((prevData: { notification: any; }) => ({
       ...prevData,
       notification: {
         ...prevData.notification,
@@ -44,7 +45,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
         toast.error("Password must contain at least 5 digits")
         return
       }
-      setFormData((prevData) => ({...prevData, password:newPassword}))
+      setFormData((prevData: any) => ({...prevData, password:newPassword}))
       toast.success("Your new Password have been saved successfully!")
     } catch (err) {
       toast.error('Something went wrong! please try again')
@@ -74,7 +75,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
                     id="username"
                     value={formData.username}
                     onChange={(e) =>
-                      setFormData((prevData) => ({
+                      setFormData((prevData: any) => ({
                         ...prevData,
                         username: e.target.value,
                       }))
@@ -116,7 +117,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
                   placeholder={user.name}
                   value={formData.name}
                   onChange={(e) =>
-                    setFormData((prevData) => ({
+                    setFormData((prevData: any) => ({
                       ...prevData,
                       name: e.target.value,
                     }))
@@ -142,7 +143,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
                   placeholder={user.email}
                   value={formData.email}
                   onChange={(e) =>
-                    setFormData((prevData) => ({
+                    setFormData((prevData: any) => ({
                       ...prevData,
                       email: e.target.value,
                     }))
@@ -166,7 +167,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
                   name="country"
                   value={formData.country}
                   onChange={(e) =>
-                    setFormData((prevData) => ({
+                    setFormData((prevData: any) => ({
                       ...prevData,
                       country: e.target.value,
                     }))
@@ -195,7 +196,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
                   placeholder={user?.street}
                   value={formData.street}
                   onChange={(e) =>
-                    setFormData((prevData) => ({
+                    setFormData((prevData: any) => ({
                       ...prevData,
                       street: e.target.value,
                     }))

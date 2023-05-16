@@ -1,4 +1,4 @@
-export function getInitialFormValues(user:User) {
+export function getInitialFormValues(user:User | any) {
   return {
     id: user.id ? user.id : "",
     name: user.name ? user.name : "",
