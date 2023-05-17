@@ -2,12 +2,13 @@
 
 import { pusherClient } from "@/lib/pusher";
 import { chatHrefContructor, toPusherKey } from "@/lib/utils";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 import UnseenChatToast from "./UnseenChatToast";
 import { Trash2Icon } from "lucide-react";
 import axios from "axios";
+
 
 interface SidebarChatListProps {
   friends: User[];
@@ -21,18 +22,20 @@ interface ExtendedMessage extends Message {
 
 const SidebarChatList = ({ friends, sessionId }: SidebarChatListProps) => {
   const path = usePathname();
+  const router = useRouter()
   const [unseenMsgs, setUnseenMsgs] = useState<Message[]>([]);
   const [activeChats, setActiveChats] = useState<User[]>(friends);
   const [hoveredIndex, setHoveredIndex] = useState<string | null>(null);
 
   const handleDeleteChat = async (
     e: React.MouseEvent<HTMLElement>,
-    chatId: string
+    friendId: string
   ) => {
     e.preventDefault();
     try {
-      await axios.delete(`/api/chat/:${chatId}`)
-
+      const res = await axios.delete(`/api/friends/remove/${friendId}`)
+      console.log(res)
+      router.refresh()
     } catch (err) {
       console.error(err)
     }
@@ -44,7 +47,11 @@ const SidebarChatList = ({ friends, sessionId }: SidebarChatListProps) => {
 
     const newFriendHandler = (newFriend: User) => {
       setActiveChats((prev) => [...prev, newFriend]);
-    };
+    }
+
+    const removeFriendHandler = (friendToRemoveId:string) => {
+      setActiveChats((prev) => prev.filter((friend) => friend.id !== friendToRemoveId))
+    }
 
     const chatHandler = (message: ExtendedMessage) => {
       const shoudNotify =
@@ -68,13 +75,15 @@ const SidebarChatList = ({ friends, sessionId }: SidebarChatListProps) => {
 
     pusherClient.bind("new_message", chatHandler);
     pusherClient.bind("new_friend", newFriendHandler);
+    pusherClient.bind('remove_friend', removeFriendHandler)
 
     return () => {
       pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:chats`));
       pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:friends`));
 
       pusherClient.unbind("new_message", chatHandler);
-      pusherClient.unbind("new_friend", newFriendHandler);
+      pusherClient.unbind("new_friend", newFriendHandler)
+      pusherClient.bind('remove_friend', removeFriendHandler)
     };
   }, [path, sessionId]);
 

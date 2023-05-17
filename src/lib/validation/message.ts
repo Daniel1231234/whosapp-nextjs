@@ -4,7 +4,8 @@ export const messageSchema = z.object({
     id:z.string(),
     senderId:z.string(),
     text:z.string(),
-    createdAt:z.number()
+    createdAt:z.number(),
+    isImage:z.boolean(),
 })
 
 export const messageArrSchema = z.array(messageSchema)

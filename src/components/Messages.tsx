@@ -9,6 +9,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import RightClickMenu from "./RightClickMenu";
 import { toast } from "react-hot-toast";
 import axios, { AxiosError } from "axios";
+import { CldImage } from "next-cloudinary";
 
 interface MessagesProps {
   initialMessages: Message[];
@@ -124,7 +125,8 @@ const Messages: FC<MessagesProps> = ({
       )}
 
       {messages.map((msg, idx) => {
-        const isVoiceMsg = msg.text.startsWith("blob");
+        const isVoiceMsg = msg.text.startsWith("blob")
+        const isImageMessage = msg.isImage
         const isCurrUser = msg.senderId === sessionId;
         const hasNextMessageFromSameUser =
           messages[idx - 1]?.senderId === messages[idx].senderId;
@@ -149,8 +151,20 @@ const Messages: FC<MessagesProps> = ({
                   }
                 )}
               >
-                {isVoiceMsg ? (
-                  <audio src={msg.text} controls  onContextMenu={(e) => openMenu(e, msg)}></audio>
+                {isImageMessage ? (
+                  <div onContextMenu={(e) => openMenu(e, msg)} className="w-60 h-44 relative">
+                    <CldImage 
+                    src={msg.text} 
+                    alt="" 
+                    fill
+                    sizes="(max-width: 768px) 100vw,
+                    (max-width: 1200px) 50vw,
+                    33vw"
+                     />
+                    <span className="ml-2 text-sm text-gray-400">
+                      {formatTimeStamp(msg.createdAt)}
+                    </span>
+                  </div>
                 ) : (
                   <span
                     onContextMenu={(e) => openMenu(e, msg)}

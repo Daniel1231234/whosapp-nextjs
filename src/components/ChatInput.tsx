@@ -9,6 +9,7 @@ import CustomEmojiPicker from "./EmojiPicker";
 import { ImageIcon, SmileIcon } from "lucide-react";
 import { useOnClickOutside } from "@/hooks/useOnClickOutside";
 import { useDropzone } from "react-dropzone";
+import { CldUploadButton } from "next-cloudinary";
 
 interface ChatInputProps {
   chatPartner: User;
@@ -20,7 +21,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [input, setInput] = useState<string>("");
   const [openEmojiPicker, setOpenEmojiPicker] = useState(false);
-  const [image, setImage] = useState<File | null>(null);
+  const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const chatInputRef = useRef<HTMLDivElement | null>(null);
 
@@ -34,7 +35,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      await axios.post("/api/message/send", { text: input, chatId });
+      await axios.post("/api/message/send", { text: input, chatId, isImage:false });
       setInput("");
       textareaRef.current?.focus();
     } catch (err) {
@@ -49,10 +50,20 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
     clonseImgContianer();
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    console.log(file);
-
+  const handleUpload = async (results: any) => {
+    setIsLoading(true);
+    const imageUrl = results.info.secure_url;
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await axios.post("/api/message/send", { text: imageUrl, chatId, isImage:true });
+      textareaRef.current?.focus();
+    } catch (err) {
+      toast.error(
+        "Something went wrong with your image, Please try again later."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -108,17 +119,17 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
                 <SmileIcon strokeWidth={2} color="gray" />
               </Button>
               <div className="relative">
-                <label htmlFor="image-upload" >
-                  <ImageIcon strokeWidth={2} color="gray" className="cursor-pointer" />
-                  <input
-                    type="file"
-                    id="image-upload"
-                    accept="image/png, image/jpeg"
-                    name="image-upload"
-                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    onChange={handleImageUpload}
+                <CldUploadButton
+                  options={{ maxFiles: 1 }}
+                  onUpload={handleUpload}
+                  uploadPreset="wz721uu6"
+                >
+                  <ImageIcon
+                    strokeWidth={2}
+                    color="gray"
+                    className="cursor-pointer"
                   />
-                </label>
+                </CldUploadButton>
               </div>
             </div>
           </div>

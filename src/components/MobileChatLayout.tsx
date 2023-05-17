@@ -7,7 +7,7 @@ import Link from "next/link";
 import { FC, Fragment, useEffect, useState } from "react";
 import { Icons } from "./Icons";
 import SignOutButton from "./SignOutButton";
-import Button, { buttonVariants } from "./UI/Button";
+import Button from "./UI/Button";
 import SidebarChatList from "./SidebarChatList";
 import { Session } from "next-auth";
 import { SidebarOpt } from "@/types/typings";
@@ -138,7 +138,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
 
                             <li className="-ml-6 mt-auto flex items-center">
                               <div className="flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900">
-                                <div className="relative h-8 w-8 bg-gray-50">
+                                <div className="relative h-8 w-8">
                                   <Image
                                     fill
                                     referrerPolicy="no-referrer"

@@ -2,7 +2,7 @@ import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import { fetchRedis } from "@/helpers/redis";
 import { authOptions } from "@/lib/auth";
 import { chatHrefContructor } from "@/lib/utils";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ImageIcon } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Link from "next/link";
 import Image from "next/image";
@@ -22,10 +22,9 @@ const Page = async () => {
         `chat:${chatHrefContructor(session.user.id, friend.id)}:messages`,
         -1,
         -1
-      )) as string[]
+      )) as string[];
 
-      const pardesLastMsgs = lastMsg ? JSON.parse(lastMsg) : null
-      console.log('pardesLastMsgs => ', pardesLastMsgs)
+      const pardesLastMsgs = lastMsg ? JSON.parse(lastMsg) : null;
       return {
         ...friend,
         pardesLastMsgs,
@@ -43,7 +42,7 @@ const Page = async () => {
           <div
             key={friend.id}
             className="relative dark:border-transparent dark:bg-slate-900 bg-zinc-50 border border-zinc-200 p-3 rounded-md"
-           >
+          >
             <div className="absolute  right-4 inset-y-0 flex items-center">
               <ChevronRight className="h-7 w-7 text-zinc-400" />
             </div>
@@ -69,22 +68,23 @@ const Page = async () => {
                 </div>
               </div>
               <div>
-                <h4 className='text-lg dark:text-slate-300 font-semibold'>{friend.name}</h4>
-                <p className='mt-1 max-w-md  dark:text-zinc-400'>
-                  <span className=''>
+                <h4 className="text-lg dark:text-slate-300 font-semibold">
+                  {friend.name}
+                </h4>
+                <p className="mt-1 max-w-md  dark:text-zinc-400">
+                  <span className="">
                     {friend.pardesLastMsgs?.senderId === session.user.id
-                      ? 'You: '
-                      : ''}
+                      ? "You: "
+                      : ""}
                   </span>
-                  {friend.pardesLastMsgs?.text}
+                  {friend.pardesLastMsgs?.isImage ? <ImageIcon /> : friend.pardesLastMsgs?.text }
                 </p>
               </div>
             </Link>
           </div>
         ))
-        )}
-        <div>
-        </div>
+      )}
+      <div></div>
     </div>
   );
 };

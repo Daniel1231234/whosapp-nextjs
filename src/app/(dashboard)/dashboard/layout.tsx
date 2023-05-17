@@ -42,8 +42,6 @@ const Layout = async ({ children }: LayoutProps) => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
-  // console.log("session => ", session);
-
   const friends = await getFriendsByUserId(session.user.id);
 
   const unseenReqCount = (
@@ -142,7 +140,7 @@ const Layout = async ({ children }: LayoutProps) => {
                   </div>
                 </div>
 
-                <SignOutButton className="h-full aspect-square" />
+                <SignOutButton className="h-full aspect-square dark:hover:text-gray-50" />
               </li>
             </ul>
           </nav>

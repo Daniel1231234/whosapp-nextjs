@@ -10,7 +10,7 @@ import { getServerSession } from "next-auth";
 
 export async function POST(req: Request) {
   try {
-    const { text, chatId }: { text: string; chatId: string } = await req.json();
+    const { text, chatId, isImage }: { text: string; chatId: string, isImage:boolean } = await req.json();
     const session = await getServerSession(authOptions);
 
     if (!session) return new Response("Unauthorized", { status: 401 });
@@ -45,6 +45,7 @@ export async function POST(req: Request) {
       senderId: session.user.id,
       text,
       createdAt: timestamp,
+      isImage: isImage ?? false
     };
 
     const message = messageSchema.parse(messageData);
