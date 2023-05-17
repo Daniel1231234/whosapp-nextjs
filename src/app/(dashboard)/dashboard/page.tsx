@@ -12,7 +12,6 @@ const Page = async () => {
   const session = await getServerSession(authOptions);
   if (!session) notFound();
 
-  const demoImg = `https://robohash.org/${session.user.id}`
   const friends = getFriendsByUserId(session.user.id);
   const friendsWithLastMsg = await Promise.all(
     (
@@ -25,7 +24,8 @@ const Page = async () => {
         -1
       )) as string[]
 
-      const pardesLastMsgs = JSON.parse(lastMsg)
+      const pardesLastMsgs = lastMsg ? JSON.parse(lastMsg) : null
+      console.log('pardesLastMsgs => ', pardesLastMsgs)
       return {
         ...friend,
         pardesLastMsgs,
@@ -61,7 +61,7 @@ const Page = async () => {
                     referrerPolicy="no-referrer"
                     className="rounded-full"
                     alt={`${friend.name} profile picture`}
-                    src={friend.image ? friend.image : demoImg}
+                    src={friend.image ? friend.image : ""}
                     sizes="(max-width: 768px) 100vw,
                             (max-width: 1200px) 50vw,
                             33vw"
@@ -72,11 +72,11 @@ const Page = async () => {
                 <h4 className='text-lg dark:text-slate-300 font-semibold'>{friend.name}</h4>
                 <p className='mt-1 max-w-md  dark:text-zinc-400'>
                   <span className=''>
-                    {friend.pardesLastMsgs.senderId === session.user.id
+                    {friend.pardesLastMsgs?.senderId === session.user.id
                       ? 'You: '
                       : ''}
                   </span>
-                  {friend.pardesLastMsgs.text}
+                  {friend.pardesLastMsgs?.text}
                 </p>
               </div>
             </Link>

@@ -8,7 +8,7 @@ interface EmojiPickerProps {
 const CustomEmojiPicker: FC<EmojiPickerProps> = ({ handleEmojiClick }) => {
 
   return (
-    <div className="max-h-[120px] overflow-y-auto">
+    <div className="max-h-[100px] overflow-y-auto">
       <div className="flex flex-wrap items-center bg-gray-50 p-4">
         {Object.keys(emojiData).map((emoji: any) => (
           <span
