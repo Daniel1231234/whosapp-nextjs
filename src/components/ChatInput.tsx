@@ -2,7 +2,7 @@
 
 import { FC, useRef, useState } from "react";
 import TextareaAutosize from "react-textarea-autosize";
-import Button from "./UI/Button";
+import Button, { buttonVariants } from "./UI/Button";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import CustomEmojiPicker from "./EmojiPicker";
@@ -68,7 +68,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
 
   return (
     <div
-      className="border-t dark:border-transparent border-gray-200 px-4 pt-4 mb-2 sm:mb-0"
+      className="border-t dark:border-transparent border-gray-200  pt-4 sm:mb-0 "
       ref={chatInputRef}
     >
       {openEmojiPicker ? (
@@ -118,7 +118,7 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
               >
                 <SmileIcon strokeWidth={2} color="gray" />
               </Button>
-              <div className="relative">
+              <div className={`relative ${buttonVariants({variant:'ghost', size:'sm'})}`}>
                 <CldUploadButton
                   options={{ maxFiles: 1 }}
                   onUpload={handleUpload}
@@ -135,9 +135,6 @@ const ChatInput: FC<ChatInputProps> = ({ chatPartner, chatId }) => {
           </div>
         </div>
       )}
-      {/* {openEmojiPicker && (
-        <CustomEmojiPicker handleEmojiClick={handleEmojiClick} />
-      )} */}
     </div>
   );
 };

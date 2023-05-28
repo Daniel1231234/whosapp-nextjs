@@ -33,7 +33,7 @@ const Page = async () => {
   );
 
   return (
-    <div className="container dark:bg-slate-800 rounded-md py-12 ">
+    <div className="container dark:bg-slate-800 rounded-md py-12 sm:py-8 ">
       <h1 className="font-bold text-5xl mb-8">Recent chats</h1>
       {friendsWithLastMsg.length === 0 ? (
         <p>No messages yes</p>

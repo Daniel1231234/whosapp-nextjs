@@ -13,8 +13,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body>
-      <div id="portal" />
+      <body suppressHydrationWarning>
+        <div id="portal" />
         <Providers>{children}</Providers>
       </body>
     </html>

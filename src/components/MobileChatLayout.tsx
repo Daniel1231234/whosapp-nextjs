@@ -38,8 +38,8 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
   }, [pathname]);
 
   return (
-    <div className="fixed dark:bg-slate-900 bg-zinc-50 border-b dark:border-transparent border-zinc-200 top-0 inset-x-0 py-2 px-4">
-      <div className="w-full flex justify-between items-center">
+    <div className="fixed dark:bg-slate-900 bg-zinc-50 border-b dark:border-transparent border-zinc-200 top-0 inset-x-0 py-0 px-0">
+      <div className="w-full flex justify-between items-center  p-2 bg-zinc-200 dark:bg-slate-700">
         <Link href="/dashboard" className="">
           <Icons.Logo className="h-6 w-auto text-indigo-600 dark:text-slate-300" />
         </Link>

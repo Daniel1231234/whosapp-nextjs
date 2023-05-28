@@ -7,25 +7,23 @@ import Image from "next/image";
 import { GptMessageType } from "@/lib/validation/message";
 import { toPusherKey } from "@/lib/utils";
 import { pusherClient } from "@/lib/pusher";
-
+import AlertModal from "./AlertModal";
 
 interface MainChatProps {
   initialMessages: GptMessageType[];
   chatId: string;
 }
 
-
-
 const MainChat = ({ initialMessages, chatId }: MainChatProps) => {
-  
   const [messages, setMessages] = useState<GptMessageType[]>(initialMessages);
-  const scrollDownRef = useRef<HTMLDivElement | null>(null)
+  const scrollDownRef = useRef<HTMLDivElement | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(true);
 
   useEffect(() => {
     pusherClient.subscribe(toPusherKey(`chat:${chatId}`));
 
     const messageHandler = (twoMessages: GptMessageType[]) => {
-      console.log(twoMessages)
+      console.log(twoMessages);
       setMessages((prev) => [twoMessages[1], twoMessages[0], ...prev]);
     };
     pusherClient.bind("incoming-message", messageHandler);
@@ -38,6 +36,7 @@ const MainChat = ({ initialMessages, chatId }: MainChatProps) => {
 
   return (
     <>
+      <AlertModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
       <main className="flex-1  justify-between flex flex-col h-full max-h-[calc(100vh - 6rem)] relative">
         <div className="flex sm:items-center justify-between py-3 dark:border-transparent border-b-2 border-gray-200">
           <div className="relative flex items-center space-x-4">
