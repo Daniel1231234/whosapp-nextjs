@@ -3,12 +3,16 @@ import React, { useState } from "react";
 import PasswordChecklist from "react-password-checklist";
 
 interface CheckPasswordProps {
- userCred:UserCred
- setUserCred:React.Dispatch<React.SetStateAction<UserCred>>
- checkPasswordValid:(isValid:boolean) => void
+  userCred: UserCred;
+  setUserCred: React.Dispatch<React.SetStateAction<UserCred>>;
+  checkPasswordValid: (isValid: boolean) => void;
 }
 
-const CheckPassword = ({userCred, setUserCred, checkPasswordValid}: CheckPasswordProps) => {
+const CheckPassword = ({
+  userCred,
+  setUserCred,
+  checkPasswordValid,
+}: CheckPasswordProps) => {
   return (
     <>
       <div className="relative mt-3">
@@ -55,6 +59,8 @@ const CheckPassword = ({userCred, setUserCred, checkPasswordValid}: CheckPasswor
       </div>
 
       <PasswordChecklist
+        iconSize={10}
+        style={{ fontSize: 10 }}
         rules={["minLength", "match"]}
         minLength={5}
         value={userCred.password}

@@ -1,5 +1,6 @@
 "use client";
 
+import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "next-themes";
 import { FC } from "react";
 import { Toaster } from "react-hot-toast";
@@ -11,14 +12,14 @@ interface ProvidersProps {
 
 const Providers: FC<ProvidersProps> = ({ children }) => {
   return (
-    <>
+    <SessionProvider>
       <ThemeProvider attribute="class">
         <Provider>
           <Toaster position="top-center" reverseOrder={false} />
           {children}
         </Provider>
       </ThemeProvider>
-    </>
+    </SessionProvider>
   );
 };
 

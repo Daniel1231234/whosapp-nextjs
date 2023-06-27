@@ -13,7 +13,8 @@ import { Session } from "next-auth";
 import { SidebarOpt } from "@/types/typings";
 import { usePathname } from "next/navigation";
 import FriendRequestSidebarOpt from "./FriendRequestSidebarOpt";
-import ButtonToggleDarkMode from "./ToggleDarkMode";
+import ButtonToggleDarkMode from "./ToggleDarkMode1";
+import AppLogo from "./AppLogo";
 
 interface MobileChatLayoutProps {
   friends: User[];
@@ -32,7 +33,6 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
 
   const pathname = usePathname();
 
-
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
@@ -41,7 +41,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
     <div className="fixed dark:bg-slate-900 bg-zinc-50 border-b dark:border-transparent border-zinc-200 top-0 inset-x-0 py-0 px-0">
       <div className="w-full flex justify-between items-center  p-2 bg-zinc-200 dark:bg-slate-700">
         <Link href="/dashboard" className="">
-          <Icons.Logo className="h-6 w-auto text-indigo-600 dark:text-slate-300" />
+          <AppLogo />
         </Link>
         <Button onClick={() => setOpen(true)} className="gap-4">
           Menu <Menu className="h-6 w-6" />
@@ -114,7 +114,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
                                     <li key={option.name}>
                                       <Link
                                         href={option.href}
-                                        className="text-gray-700  dark:text-gray-50 dark:hover:text-gray-800 hover:text-indigo-600 hover:bg-gray-50 group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
+                                        className="text-gray-700  dark:text-gray-50 dark:hover:text-gray-800 hover:text-indigo-600 hover:bg-gray-50 group  flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                       >
                                         <span className="text-gray-400 border-gray-200  group-hover:border-indigo-600 group-hover:text-indigo-600 flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
                                           <Icon className="h-4 w-4" />

@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from 'next-auth'
 import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter";
 import { db } from "./db";
 import GoogleProvider from "next-auth/providers/google"
@@ -39,9 +39,6 @@ export const authOptions: NextAuthOptions = {
             clientId: getProviderCredentials('google').clientId,
             clientSecret: getProviderCredentials('google').clientSecret,
             profile(profile, tokens) {
-                console.log('tokens => ', tokens)
-                console.log('profile => ', profile)
-
                 return {
                     id: profile.sub,
                     name: profile.name,
@@ -70,7 +67,7 @@ export const authOptions: NextAuthOptions = {
                     const apiUrl = process.env.VERCEL_ENV === 'production' ? `https://${process.env.VERCEL_URL}/api/login` : "http://localhost:3000/api/login";
 
                     const res = await axios.post(apiUrl, credentials)
-                    // console.log('result from login => ', res)
+
                     const user = res.data
                     if (user) return user
                     else return null
@@ -123,8 +120,12 @@ export const authOptions: NextAuthOptions = {
 
             return session
         },
-        redirect() {
-            return '/dashboard'
+        async redirect({ url, baseUrl }) {
+            // Allows relative callback URLs
+            if (url.startsWith("/")) return `${baseUrl}${url}`
+            // Allows callback URLs on the same origin
+            else if (new URL(url).origin === baseUrl) return url
+            return baseUrl
         }
     }
 }

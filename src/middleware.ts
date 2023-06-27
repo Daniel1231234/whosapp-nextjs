@@ -5,11 +5,8 @@ import { NextResponse } from 'next/server'
 export default withAuth(
     async function middleware(req) {
         const pathname = req.nextUrl.pathname
- 
         const isAuth = await getToken({ req })
-
         const isLoginPage = pathname.startsWith('/login')
-
         const sensitiveRoutes = ['/dashboard']
         const isAccesingSensitiveRoutes = sensitiveRoutes.some((route) => pathname.startsWith(route))
 
@@ -17,23 +14,16 @@ export default withAuth(
             if (isAuth) {
                 return NextResponse.redirect(new URL('/dashboard', req.url))
             }
-            
             return NextResponse.next()
         }
 
         if (!isAuth && isAccesingSensitiveRoutes) {
-            return NextResponse.redirect(new URL('/login', req.url))
-        }
-
-        if (pathname === '/') {
-            return NextResponse.redirect(new URL('/dashboard', req.url))
+            return NextResponse.redirect(new URL('/', req.url))
         }
     },
     {
         callbacks: {
             async authorized({ token }) {
-                // console.log('token => ', token)
-                
                 return true
             }
         }
@@ -42,7 +32,7 @@ export default withAuth(
 
 export const config = {
     matchter: ['/', '/login', '/dashboard/:path*'],
-  }
+}
 
 
 

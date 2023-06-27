@@ -49,6 +49,8 @@
     "react-hot-toast": "^2.4.0",
     "react-loading-skeleton": "^3.2.1",
     "react-password-checklist": "^1.4.3",
+    "react-select": "^5.7.3",
+    "react-spinners": "^0.13.8",
     "react-textarea-autosize": "^8.4.1",
     "react-wrap-balancer": "^0.5.0",
     "sharp": "^0.32.0",

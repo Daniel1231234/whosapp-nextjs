@@ -11,7 +11,8 @@ import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import SidebarChatList from "@/components/SidebarChatList";
 import MobileChatLayout from "@/components/MobileChatLayout";
 import { SidebarOpt } from "@/types/typings";
-import ButtonToggleDarkMode from "@/components/ToggleDarkMode";
+import ButtonToggleDarkMode from "@/components/ToggleDarkMode1";
+import AppLogo from "@/components/AppLogo";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -23,12 +24,6 @@ const sidebarOpts: SidebarOpt[] = [
     name: "Add friend",
     href: "/dashboard/add",
     Icon: "UserPlus",
-  },
-  {
-    id: 2,
-    name: "Settings",
-    href: "/dashboard/setting",
-    Icon: "SettingsIcon",
   },
   {
     id: 3,
@@ -64,8 +59,11 @@ const Layout = async ({ children }: LayoutProps) => {
         </div>
 
         <div className="hidden dark:bg-slate-800  md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 dark:border-none  bg-white px-6">
-          <Link href="/dashboard" className="flex  h-16 shrink-0 items-center">
-            <Icons.Logo className="h-8   w-auto text-indigo-600" />
+          <Link
+            href="/dashboard"
+            className="flex h-16 shrink-0  items-center border-b-2 border-gray-200 "
+          >
+            <AppLogo />
           </Link>
 
           {friends.length > 0 && (
@@ -113,7 +111,7 @@ const Layout = async ({ children }: LayoutProps) => {
               </li>
 
               <li className="-mx-6 mt-auto flex items-center">
-                <ButtonToggleDarkMode className="absolute bottom-20 left-4" />
+                <ButtonToggleDarkMode className="absolute top-4 right-4" />
                 <div className="flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 ">
                   <div className="relative h-8 w-8 ">
                     <Image

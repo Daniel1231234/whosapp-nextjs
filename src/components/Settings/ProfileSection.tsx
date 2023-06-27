@@ -6,6 +6,7 @@ import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import ChangePassword from "./ChangePassword";
+import CountrySelect from "./CountrySelect";
 
 interface IProfilePageProps {
   user: User;
@@ -17,7 +18,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formData)
+    console.log(formData);
     try {
       await axios.post("/api/user/edit", formData);
       toast.success("Success");
@@ -29,33 +30,36 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
 
-    setFormData((prevData: { notification: any; }) => ({
+    setFormData((prevData: { notification: any }) => ({
       ...prevData,
       notification: {
         ...prevData.notification,
         [name]: checked,
       },
     }));
-  }
+  };
 
-  const handleChangePassword = (e:React.MouseEvent<HTMLButtonElement>, newPassword:string) => {
-    e.preventDefault()
+  const handleChangePassword = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    newPassword: string
+  ) => {
+    e.preventDefault();
     try {
       if (newPassword.length < 5 || newPassword === "") {
-        toast.error("Password must contain at least 5 digits")
-        return
+        toast.error("Password must contain at least 5 digits");
+        return;
       }
-      setFormData((prevData: any) => ({...prevData, password:newPassword}))
-      toast.success("Your new Password have been saved successfully!")
+      setFormData((prevData: any) => ({ ...prevData, password: newPassword }));
+      toast.success("Your new Password have been saved successfully!");
     } catch (err) {
-      toast.error('Something went wrong! please try again')
+      toast.error("Something went wrong! please try again");
     }
-  }
+  };
 
   return (
     <form className="max-w-xl mx-auto" onSubmit={handleSubmit}>
       <h1 className="text-2xl font-bold leading-7 text-gray-900 dark:text-gray-50">
-        Profile
+        Settings
       </h1>
       <div className="space-y-12 mr-4">
         <div className="border-b border-gray-900/10 pb-12">
@@ -90,12 +94,12 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
             {!user.provider && (
               <>
                 <ChangePassword handleChangePassword={handleChangePassword} />
-                <ImageUploader />
               </>
             )}
           </div>
         </div>
 
+        <ImageUploader />
         <div className="border-b border-gray-900/10 pb-12">
           <h2 className="text-base font-semibold leading-7 text-gray-900 dark:text-gray-50">
             Personal Information
@@ -154,33 +158,7 @@ const ProfileSection = ({ user }: IProfilePageProps) => {
               </div>
             </div>
 
-            <div className="">
-              <label
-                htmlFor="country"
-                className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-50"
-              >
-                Country
-              </label>
-              <div className="mt-2">
-                <select
-                  id="country"
-                  name="country"
-                  value={formData.country}
-                  onChange={(e) =>
-                    setFormData((prevData: any) => ({
-                      ...prevData,
-                      country: e.target.value,
-                    }))
-                  }
-                  className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-gray-50 shadow-sm ring-1 ring-inset dark:bg-slate-800 ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                >
-                  <option value="israel">Israel</option>
-                  <option value="united states">United States</option>
-                  <option value="canada">Canada</option>
-                  <option value="mexico">Mexico</option>
-                </select>
-              </div>
-            </div>
+            <CountrySelect setFormData={setFormData} formData={formData} />
 
             <div className="">
               <label

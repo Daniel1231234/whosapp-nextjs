@@ -35,10 +35,12 @@ const Page = async () => {
   return (
     <div className="container dark:bg-slate-800 rounded-md py-12 sm:py-8 ">
       <h1 className="font-bold text-5xl mb-8">Recent chats</h1>
-      {friendsWithLastMsg.length === 0 ? (
-        <p>No messages yes</p>
-      ) : (
-        friendsWithLastMsg.map((friend) => (
+
+      {friendsWithLastMsg.length === 0 && <p>No messages yet</p>}
+
+      {friendsWithLastMsg.map((friend) => {
+        if (friend.pardesLastMsgs === null) return;
+        return (
           <div
             key={friend.id}
             className="relative dark:border-transparent dark:bg-slate-900 bg-zinc-50 border border-zinc-200 p-3 rounded-md"
@@ -62,8 +64,8 @@ const Page = async () => {
                     alt={`${friend.name} profile picture`}
                     src={friend.image ? friend.image : ""}
                     sizes="(max-width: 768px) 100vw,
-                            (max-width: 1200px) 50vw,
-                            33vw"
+                              (max-width: 1200px) 50vw,
+                              33vw"
                   />
                 </div>
               </div>
@@ -77,13 +79,17 @@ const Page = async () => {
                       ? "You: "
                       : ""}
                   </span>
-                  {friend.pardesLastMsgs?.isImage ? <ImageIcon /> : friend.pardesLastMsgs?.text }
+                  {friend.pardesLastMsgs?.isImage ? (
+                    <ImageIcon />
+                  ) : (
+                    friend.pardesLastMsgs?.text
+                  )}
                 </p>
               </div>
             </Link>
           </div>
-        ))
-      )}
+        );
+      })}
       <div></div>
     </div>
   );
