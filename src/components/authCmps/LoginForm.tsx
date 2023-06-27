@@ -33,12 +33,12 @@ const LoginForm = ({
         >
           G
         </span>
-        <span
+        {/* <span
           onClick={() => loginWithFacebook()}
           className="cursor-pointer w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white"
         >
           f
-        </span>
+        </span> */}
       </div>
       <p className="text-gray-100">use email to log in your account</p>
       <form
