@@ -11,9 +11,9 @@ import Button from "./UI/Button";
 import SidebarChatList from "./SidebarChatList";
 import { Session } from "next-auth";
 import { SidebarOpt } from "@/types/typings";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import FriendRequestSidebarOpt from "./FriendRequestSidebarOpt";
-import ButtonToggleDarkMode from "./ToggleDarkMode1";
+import ButtonToggleDarkMode from "./ToggleDarkMode";
 import AppLogo from "./AppLogo";
 
 interface MobileChatLayoutProps {
@@ -30,6 +30,7 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
   unseenRequestCount,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
+  const router = useRouter();
 
   const pathname = usePathname();
 
@@ -67,7 +68,10 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
                     <div className="flex h-full dark:bg-slate-800 flex-col overflow-hidden bg-white py-6 shadow-xl">
                       <div className="px-4 sm:px-6">
                         <div className="flex items-start justify-between">
-                          <Dialog.Title className="text-base font-semibold leading-6 text-gray-900 dark:text-slate-300">
+                          <Dialog.Title
+                            className="text-base font-semibold leading-6 text-gray-900 dark:text-slate-300 hover:opacity-80 transition cursor-pointer"
+                            onClick={() => router.push("/dashboard")}
+                          >
                             Dashboard
                           </Dialog.Title>
                           <div className="ml-3 flex h-7 items-center">

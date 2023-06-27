@@ -4,13 +4,19 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "react-hot-toast";
 import CheckPassword from "./CheckPassword";
 import AppLogo from "../AppLogo";
+import { signIn } from "next-auth/react";
 
 interface SignupFormProps {
-  isSign: boolean;
   setIsSign: Dispatch<SetStateAction<boolean>>;
+  setIsLoading: any;
+  isLoading: boolean;
 }
 
-const SignupForm = ({ isSign, setIsSign }: SignupFormProps) => {
+const SignupForm = ({
+  setIsSign,
+  isLoading,
+  setIsLoading,
+}: SignupFormProps) => {
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
   const [userCred, setUserCreds] = useState<UserCred>({
     name: "",
@@ -21,20 +27,31 @@ const SignupForm = ({ isSign, setIsSign }: SignupFormProps) => {
 
   const handleCred = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       if (userCred.name === "" || userCred.email === "" || !isPasswordValid) {
         toast.error("Something went wrong with your credentails :(");
         return;
       }
-      await axios.post("/api/signup", {
+      const { data } = await axios.post("/api/signup", {
         name: userCred.name,
         email: userCred.email,
         password: userCred.password,
       });
+      if (data === "OK") {
+        await signIn("credentials", {
+          email: userCred.email,
+          password: userCred.password,
+          callbackUrl: `${window.location.origin}/dashboard`,
+          redirect: true,
+        });
+      }
       toast.success("Welcome to WhosApp!");
       setIsSign(true);
     } catch (err) {
       toast.error("Something went wrong with your login.");
+    } finally {
+      setIsLoading(false);
     }
   };
 

@@ -69,7 +69,7 @@ const Page: FC = () => {
           <div className="absolute bg-black opacity-60 inset-0 z-0"></div>
           <div className="w-full px-24 z-10">
             <h2
-              className="text-5xl font-bold text-center tracking-wide text-gray-900 dark:text-gray-50 hover:opacity-80 transition cursor-pointer"
+              className="text-5xl font-bold text-center tracking-wide text-gray-50 hover:opacity-80 transition cursor-pointer"
               onClick={() => router.push("/")}
             >
               Welcome to WhosApp!
@@ -126,7 +126,11 @@ const Page: FC = () => {
               loginWithFacebook={loginWithFacebook}
             />
           ) : (
-            <SignupForm setIsSign={setIsSign} isSign={isSign} />
+            <SignupForm
+              setIsSign={setIsSign}
+              isLoading={isLoading}
+              setIsLoading={setIsLoading}
+            />
           )}
         </div>
       </section>

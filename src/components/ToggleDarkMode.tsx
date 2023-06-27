@@ -1,14 +1,17 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { Switch } from "@headlessui/react";
 import { useTheme } from "next-themes";
-import { MoonIcon, SunIcon } from "lucide-react";
 
 interface ButtonToggleDarkModeProps {
-  className?:string
+  className?: string;
 }
 
-const ButtonToggleDarkMode = ({className = ""}:ButtonToggleDarkModeProps) => {
+const ButtonToggleDarkMode = ({
+  className = "",
+}: ButtonToggleDarkModeProps) => {
+  const [enabled, setEnabled] = useState(false);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -16,26 +19,32 @@ const ButtonToggleDarkMode = ({className = ""}:ButtonToggleDarkModeProps) => {
     setMounted(true);
   }, []);
 
+  const handleChange = () => {
+    setEnabled(!enabled);
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   if (!mounted) {
     return null;
   }
 
   return (
-    <button
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className={`  ${className}  z-50 flex items-center gap-1 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-100 rounded-full p-2 focus:outline-none shadow-md`}
-    >
-      {theme === "dark" ? (
-        <MoonIcon className="w-6 h-6" />
-      ) : (
-        <SunIcon className="w-6 h-6" />
-      )}
-      <span className="text-sm font-medium">
-        {theme === "dark" ? "Change to Light" : "Change to Dark"}
-      </span>
-    </button>
+    <div className={`${className}`}>
+      <Switch
+        checked={enabled}
+        onChange={handleChange}
+        className={`${enabled ? "bg-teal-900" : "bg-teal-700"}
+          relative  inline-flex h-7 w-16 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75`}
+      >
+        <span className="sr-only">Toggle dark mode</span>
+        <span
+          aria-hidden="true"
+          className={`${enabled ? "translate-x-9" : "translate-x-0"}
+            pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-lg ring-0 transition duration-200 ease-in-out`}
+        />
+      </Switch>
+    </div>
   );
 };
 
 export default ButtonToggleDarkMode;
-

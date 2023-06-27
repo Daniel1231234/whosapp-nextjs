@@ -11,7 +11,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // const session =
   return (
     <html lang="en" suppressHydrationWarning>
       <body suppressHydrationWarning>

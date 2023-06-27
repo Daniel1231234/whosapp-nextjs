@@ -23,7 +23,7 @@ const LoginForm = ({
     <div className="w-full py-6 z-20">
       <h1 className="my-6">
         <span className="inline-flex">
-          <AppLogo className="text-white" />
+          <AppLogo className="text-white " />
         </span>
       </h1>
       <div className="py-6 space-x-2">

@@ -20,10 +20,10 @@ export async function POST(request: Request) {
             email: body.email,
             password: await bcrypt.hash(body.password, 10),
             image: "/avatar.png",
-            username:`${body.name}-USERNAME`,
+            username: `${body.name}-USERNAME`,
             country: 'Israel',
             street: 'ההגנה 15',
-            notification: {friendReq:false, message:false},
+            notification: { friendReq: false, message: false },
             provider: 'credentials'
         }
 
@@ -32,8 +32,8 @@ export async function POST(request: Request) {
             db.set(`user:email:${newUser.email}`, newUser.id),
         ]);
 
-        const { password, ...userCreds } = newUser
-        return new Response(JSON.stringify(userCreds))
+        // const { password, ...userCreds } = newUser
+        return new Response("OK")
     } else {
         return new Response("This Email allready exist", { status: 400 })
     }

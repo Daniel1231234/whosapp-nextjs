@@ -11,7 +11,7 @@ import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import SidebarChatList from "@/components/SidebarChatList";
 import MobileChatLayout from "@/components/MobileChatLayout";
 import { SidebarOpt } from "@/types/typings";
-import ButtonToggleDarkMode from "@/components/ToggleDarkMode1";
+import ButtonToggleDarkMode from "@/components/ToggleDarkMode";
 import AppLogo from "@/components/AppLogo";
 
 interface LayoutProps {
