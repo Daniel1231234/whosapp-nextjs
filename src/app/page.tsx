@@ -6,8 +6,8 @@ import { CldImage } from "next-cloudinary";
 
 const Home = () => {
   return (
-    <main className="container leading-normal tracking-normal text-gray-900 bg-gradient-to-r from-[#d53369] to-[#daae51] min-h-screen">
-      <header className="w-full z-30 pt-4 top-0 left-0 text-gray-900 flex items-center justify-between">
+    <main className=" leading-normal tracking-normal text-gray-900 bg-gradient-to-r from-[#d53369] to-[#daae51] min-h-screen">
+      <header className=" w-full z-30 pt-4 px-4 top-0 left-0 text-gray-900 flex items-center justify-between">
         <AppLogo />
         <ul className="flex justify-end items-center">
           <li className="mr-3">
@@ -20,7 +20,7 @@ const Home = () => {
           </li>
         </ul>
       </header>
-      <div className="pt-8 ">
+      <div className="pt-8  ">
         <div className="mx-auto flex flex-wrap items-center justify-center gap-4">
           <div className="w-full md:w-2/5 text-center md:text-left space-y-7">
             <h1 className="my-4 text-3xl md:text-5xl md:leading-tight font-bold">
