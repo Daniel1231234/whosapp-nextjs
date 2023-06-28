@@ -42,7 +42,8 @@ const Page: FC = () => {
   const loginWithGoogle = async () => {
     setIsLoading(true);
     try {
-      await signIn("google");
+      const res = await signIn("google");
+      console.log("res => ", res);
     } catch (error) {
       toast.error("Something went wrong with your login.");
     } finally {

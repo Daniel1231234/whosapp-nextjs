@@ -1,7 +1,7 @@
 import { UserLoginCred } from "@/types/typings";
-import Image from "next/image";
 import { Dispatch, SetStateAction } from "react";
 import AppLogo from "../AppLogo";
+import ProvidersAuth from "./ProvidersAuth";
 
 interface LoginFormProps {
   handleCred: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
@@ -20,27 +20,13 @@ const LoginForm = ({
   loginWithFacebook,
 }: LoginFormProps) => {
   return (
-    <div className="w-full py-6 z-20">
+    <div className="w-full  z-20">
       <h1 className="my-6">
         <span className="inline-flex">
           <AppLogo className="text-white " />
         </span>
       </h1>
-      <div className="py-6 space-x-2">
-        <span
-          onClick={() => loginWithGoogle()}
-          className="cursor-pointer w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white"
-        >
-          G
-        </span>
-        {/* <span
-          onClick={() => loginWithFacebook()}
-          className="cursor-pointer w-10 h-10 items-center justify-center inline-flex rounded-full font-bold text-lg border-2 border-white"
-        >
-          f
-        </span> */}
-      </div>
-      <p className="text-gray-100">use email to log in your account</p>
+      <p className="text-gray-100">Login with email & password</p>
       <form
         className="sm:w-2/3 w-full px-4 lg:px-0 mx-auto"
         onSubmit={(e) => handleCred(e)}
@@ -97,11 +83,16 @@ const LoginForm = ({
         </div>
 
         <div className="px-4 pb-2 pt-4">
-          <button className="uppercase text-white block w-full p-4 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">
+          <button className="uppercase text-white block w-full p-2 text-lg rounded-full bg-indigo-500 hover:bg-indigo-600 focus:outline-none">
             {"Sign in"}
           </button>
         </div>
       </form>
+      <p>Or</p>
+      <ProvidersAuth
+        loginWithFacebook={loginWithFacebook}
+        loginWithGoogle={loginWithGoogle}
+      />
     </div>
   );
 };

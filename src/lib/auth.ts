@@ -44,11 +44,6 @@ export const authOptions: NextAuthOptions = {
                     name: profile.name,
                     email: profile.email,
                     image: profile.picture,
-                    username: profile.username ?? `USERNAME ${profile.name}`,
-                    country: profile.country ?? 'israel',
-                    street: profile.street ?? "ההגנה 30",
-                    notification: profile.notification ?? { friendReq: false, message: false },
-                    provider: 'Google'
                 }
             },
         }),

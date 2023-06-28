@@ -20,16 +20,12 @@ export async function POST(request: Request) {
             email: body.email,
             password: await bcrypt.hash(body.password, 10),
             image: "/avatar.png",
-            username: `${body.name}-USERNAME`,
-            country: 'Israel',
-            street: 'ההגנה 15',
-            notification: { friendReq: false, message: false },
-            provider: 'credentials'
         }
 
         await Promise.all([
             db.set(`user:${newUser.id}`, JSON.stringify(newUser)),
             db.set(`user:email:${newUser.email}`, newUser.id),
+            db.sadd(`users`, JSON.stringify(newUser))
         ]);
 
         // const { password, ...userCreds } = newUser
