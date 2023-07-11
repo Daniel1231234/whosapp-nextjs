@@ -1,30 +1,11 @@
-import type { NextAuthOptions } from 'next-auth'
+import type { NextAuthOptions } from "next-auth";
 import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter";
 import { db } from "./db";
 import GoogleProvider from "next-auth/providers/google"
-import FacebookProvider from 'next-auth/providers/facebook'
 import CredentialsProvider from "next-auth/providers/credentials"
 import { fetchRedis } from "@/helpers/redis"
+import * as config from "../config/configuration"
 import axios from "axios";
-
-type Provider = 'google' | 'facebook' | 'credentials'
-
-
-function getProviderCredentials(providerName: Provider) {
-    const clientId = providerName === 'google' ? process.env.GOOGLE_CLIENT_ID : process.env.FACEBOOK_CLIENT_ID
-    const clientSecret = providerName === 'google' ? process.env.GOOGLE_CLIENT_SECRET : process.env.FACEBOOK_CLIENT_SECRET
-
-    if (!clientId || clientId.length === 0) {
-        throw new Error(`Missing ${providerName.toUpperCase()}_CLIENT_ID`)
-    }
-
-    if (!clientSecret || clientSecret.length === 0) {
-        throw new Error(`Missing ${providerName.toUpperCase()}_CLIENT_SECRET`)
-    }
-
-    return { clientId, clientSecret }
-
-}
 
 export const authOptions: NextAuthOptions = {
     adapter: UpstashRedisAdapter(db),
@@ -36,20 +17,8 @@ export const authOptions: NextAuthOptions = {
     },
     providers: [
         GoogleProvider({
-            clientId: getProviderCredentials('google').clientId,
-            clientSecret: getProviderCredentials('google').clientSecret,
-            profile(profile, tokens) {
-                return {
-                    id: profile.sub,
-                    name: profile.name,
-                    email: profile.email,
-                    image: profile.picture,
-                }
-            },
-        }),
-        FacebookProvider({
-            clientId: getProviderCredentials('facebook').clientId,
-            clientSecret: getProviderCredentials('facebook').clientSecret
+            clientId: config.default().googleClientId,
+            clientSecret: config.default().googleClientSecret,
         }),
         CredentialsProvider({
             name: 'Credentials',
@@ -92,30 +61,21 @@ export const authOptions: NextAuthOptions = {
                 name: dbUser.name,
                 email: dbUser.email,
                 picture: dbUser.image,
-                username: dbUser.username,
-                country: dbUser.country,
-                street: dbUser.street,
-                notification: dbUser.notification,
-                provider: dbUser.provider
             }
         },
         async session({ session, token }) {
 
             if (token) {
                 session.user.id = token.id
-                session.user.name = token.name!
-                session.user.email = token.email!
-                session.user.image = token.picture!
-                session.user.username = token.username!
-                session.user.country = token.country!
-                session.user.street = token.street!
-                session.user.notification = token.notification!
-                session.user.provider = token.provider!
+                session.user.name = token.name
+                session.user.email = token.email
+                session.user.image = token.picture
             }
 
             return session
         },
-        async redirect({ url, baseUrl }) {
+        redirect({ url, baseUrl }) {
+            return "/dashboard"
             // Allows relative callback URLs
             if (url.startsWith("/")) return `${baseUrl}${url}`
             // Allows callback URLs on the same origin

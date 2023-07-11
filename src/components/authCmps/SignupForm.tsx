@@ -1,3 +1,5 @@
+"use client";
+
 import { UserCred } from "@/types/typings";
 import axios from "axios";
 import { Dispatch, SetStateAction, useState } from "react";
@@ -5,19 +7,15 @@ import { toast } from "react-hot-toast";
 import CheckPassword from "./CheckPassword";
 import AppLogo from "../AppLogo";
 import { signIn } from "next-auth/react";
+import Loader from "../UI/Loader";
 
 interface SignupFormProps {
   setIsSign: Dispatch<SetStateAction<boolean>>;
-  setIsLoading: any;
-  isLoading: boolean;
 }
 
-const SignupForm = ({
-  setIsSign,
-  isLoading,
-  setIsLoading,
-}: SignupFormProps) => {
+const SignupForm = ({ setIsSign }: SignupFormProps) => {
   const [isPasswordValid, setIsPasswordValid] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [userCred, setUserCreds] = useState<UserCred>({
     name: "",
     email: "",
@@ -42,12 +40,9 @@ const SignupForm = ({
         await signIn("credentials", {
           email: userCred.email,
           password: userCred.password,
-          callbackUrl: `${window.location.origin}/dashboard`,
-          redirect: true,
         });
       }
       toast.success("Welcome to WhosApp!");
-      setIsSign(true);
     } catch (err) {
       toast.error("Something went wrong with your login.");
     } finally {
@@ -59,6 +54,7 @@ const SignupForm = ({
     setIsPasswordValid(isValid);
   };
 
+  if (isLoading) return <Loader isLoading={isLoading} />;
   return (
     <div className="w-full py-6 z-20">
       <h1 className="my-6">

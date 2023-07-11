@@ -30,10 +30,10 @@ export async function POST(request: Request) {
     }
   } catch (err) {
     if (err instanceof AxiosError) {
-      
+
       return new Response(err.response?.data)
     }
-    
+
     return new Response("Something went wrong", { status: 400 });
   }
 

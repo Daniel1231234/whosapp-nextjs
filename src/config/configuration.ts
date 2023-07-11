@@ -1,0 +1,33 @@
+export enum ConfigOptions {
+    NODE_ENV = 'nodeEnvironment',
+    VERCEL_ENV = "vercelEnv",
+    NEXTAUTH_SECRET = "nextAuthSecret",
+    UPSTASH_REDIS_REST_URL = "upstashRestUrl",
+    UPSTASH_REDIS_REST_TOKEN = "upstashRestToken",
+    GOOGLE_CLIENT_ID = "googleClientId",
+    GOOGLE_CLIENT_SECRET = "googleClientSecret",
+    FACEBOOK_CLIENT_ID = "facebookClientId",
+    FACEBOOK_CLIENT_SECRET = "facebookClientSecret",
+    PUSHER_APP_ID = "pusherAppId",
+    NEXT_PUBLIC_PUSHER_APP_KEY = "pusherAppKey",
+    PUSHER_APP_SECRET = "pusherAppSecret",
+    OPENAI_API_KEY = "openaiApiKey",
+    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME = "cloudinaryCloudName",
+}
+
+export default () => ({
+    nodeEnvironment: process.env.NODE_ENV,
+    vercelEnv: process.env.VERCEL_ENV,
+    nextAuthSecret: process.env.NEXTAUTH_SECRET!,
+    upstashRestUrl: process.env.UPSTASH_REDIS_REST_URL,
+    upstashRestToken: process.env.UPSTASH_REDIS_REST_TOKEN,
+    googleClientId: process.env.GOOGLE_CLIENT_ID!,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    facebookClientId: process.env.FACEBOOK_CLIENT_ID!,
+    facebookClientSecret: process.env.FACEBOOK_CLIENT_SECRET!,
+    pusherAppId: process.env.PUSHER_APP_ID!,
+    pusherAppKey: process.env.NEXT_PUBLIC_PUSHER_APP_KEY!,
+    pusherAppSecret: process.env.PUSHER_APP_SECRET!,
+    openaiApiKey: process.env.OPENAI_API_KEY!,
+    cloudinaryCloudName: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!,
+})

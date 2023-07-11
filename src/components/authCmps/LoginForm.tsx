@@ -1,24 +1,56 @@
+"use client";
+
 import { UserLoginCred } from "@/types/typings";
-import { Dispatch, SetStateAction } from "react";
+import { useState } from "react";
 import AppLogo from "../AppLogo";
 import ProvidersAuth from "./ProvidersAuth";
+import toast from "react-hot-toast";
+import { signIn } from "next-auth/react";
+import Loader from "../UI/Loader";
 
 interface LoginFormProps {
-  handleCred: (e: React.FormEvent<HTMLFormElement>) => Promise<void>;
-  userCreds: UserLoginCred;
-  setUserCreds: Dispatch<SetStateAction<UserLoginCred>>;
   setIsSign: any;
-  loginWithFacebook: any;
-  loginWithGoogle: any;
 }
-const LoginForm = ({
-  handleCred,
-  userCreds,
-  setUserCreds,
-  setIsSign,
-  loginWithGoogle,
-  loginWithFacebook,
-}: LoginFormProps) => {
+const LoginForm = ({ setIsSign }: LoginFormProps) => {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [userCred, setUserCreds] = useState<UserLoginCred>({
+    email: "",
+    password: "",
+  });
+
+  const handleCred = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      if (userCred.email === "" || userCred.password === "") {
+        toast.error("Something went wrong with your credentails");
+        return;
+      }
+      await signIn("credentials", {
+        email: userCred.email,
+        password: userCred.password,
+      });
+    } catch (err) {
+      toast.error("Something went wrong with your login.");
+      throw err;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const loginWithGoogle = async () => {
+    setIsLoading(true);
+    try {
+      const res = await signIn("google");
+      console.log(res);
+    } catch (error) {
+      toast.error("Something went wrong with your login.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  if (isLoading) return <Loader isLoading={isLoading} />;
   return (
     <div className="w-full  z-20">
       <h1 className="my-6">
@@ -37,9 +69,9 @@ const LoginForm = ({
             id="email"
             type="text"
             placeholder="Email"
-            value={userCreds.email}
+            value={userCred.email}
             onChange={(e) =>
-              setUserCreds({ ...userCreds, email: e.target.value })
+              setUserCreds({ ...userCred, email: e.target.value })
             }
           />
           <div className="absolute left-0 inset-y-0 flex items-center">
@@ -61,9 +93,9 @@ const LoginForm = ({
             id="password"
             type="text"
             placeholder="Password"
-            value={userCreds.password}
+            value={userCred.password}
             onChange={(e) =>
-              setUserCreds({ ...userCreds, password: e.target.value })
+              setUserCreds({ ...userCred, password: e.target.value })
             }
           />
           <div className="absolute left-0 inset-y-0 flex items-center">
@@ -89,10 +121,7 @@ const LoginForm = ({
         </div>
       </form>
       <p>Or</p>
-      <ProvidersAuth
-        loginWithFacebook={loginWithFacebook}
-        loginWithGoogle={loginWithGoogle}
-      />
+      <ProvidersAuth loginWithGoogle={loginWithGoogle} />
     </div>
   );
 };

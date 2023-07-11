@@ -11,7 +11,7 @@ interface ButtonToggleDarkModeProps {
 const ButtonToggleDarkMode = ({
   className = "",
 }: ButtonToggleDarkModeProps) => {
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 

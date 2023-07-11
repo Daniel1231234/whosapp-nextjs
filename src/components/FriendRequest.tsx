@@ -22,15 +22,16 @@ const FriendRequest: FC<FriendRequestProps> = ({
     incomingFriendRequests
   );
 
-
-
   useEffect(() => {
     pusherClient.subscribe(
       toPusherKey(`user:${sessionId}:incoming_friend_requests`)
-    )
+    );
 
-    const friendRequestHandler = ({senderId, senderEmail}:IncomingFriendRequest) => {
-      setFriendRequests((prev) => [...prev, {senderId, senderEmail}])
+    const friendRequestHandler = ({
+      senderId,
+      senderEmail,
+    }: IncomingFriendRequest) => {
+      setFriendRequests((prev) => [...prev, { senderId, senderEmail }]);
     };
 
     pusherClient.bind("incoming_friend_requests", friendRequestHandler);
@@ -64,7 +65,7 @@ const FriendRequest: FC<FriendRequestProps> = ({
       {friendRequests.length === 0 ? (
         <p className="text-sm text-zinc-500">Nothing to show here...</p>
       ) : (
-        friendRequests.map((request) => (
+        friendRequests?.map((request) => (
           <div key={request.senderId} className="flex gap-4 items-center">
             <UserPlus className="text-black" />
             <p className="font-medium text-lg">{request.senderEmail}</p>

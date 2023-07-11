@@ -5,14 +5,15 @@ import { getServerSession } from "next-auth";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import SignOutButton from "@/components/SignOutButton";
-import FriendRequestSidebarOpt from "@/components/FriendRequestSidebarOpt";
 import { fetchRedis } from "@/helpers/redis";
 import { getFriendsByUserId } from "@/helpers/get-friends-by-user-id";
 import SidebarChatList from "@/components/SidebarChatList";
 import MobileChatLayout from "@/components/MobileChatLayout";
 import { SidebarOpt } from "@/types/typings";
-import ButtonToggleDarkMode from "@/components/ToggleDarkMode";
 import AppLogo from "@/components/AppLogo";
+import { db } from "@/lib/db";
+import UserMenu from "@/components/UserMenu";
+import { Globe } from "lucide-react";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -33,18 +34,47 @@ const sidebarOpts: SidebarOpt[] = [
   },
 ];
 
+async function checkIfUserInDb(user: User) {
+  try {
+    const totalUsers: User[] = await db.smembers("users");
+    const isUserInList = totalUsers.filter((usr) => usr.id === user.id);
+    if (!isUserInList || isUserInList.length === 0) {
+      console.log("user is not in the list");
+      await db.sadd("users", JSON.stringify(user));
+    }
+  } catch (err) {
+    console.log(err);
+  }
+}
+
 const Layout = async ({ children }: LayoutProps) => {
   const session = await getServerSession(authOptions);
+
   if (!session) notFound();
+
+  await checkIfUserInDb(session.user as User);
 
   const friends = await getFriendsByUserId(session.user.id);
 
-  const unseenReqCount = (
-    (await fetchRedis(
-      "smembers",
-      `user:${session.user.id}:incoming_friend_requests`
-    )) as User[]
-  ).length;
+  const incomingSenderIds = (await fetchRedis(
+    "smembers",
+    `user:${session.user.id}:incoming_friend_requests`
+  )) as string[];
+
+  const incomingFriendRequests = await Promise.all(
+    incomingSenderIds.map(async (senderId) => {
+      const senderSTR = (await fetchRedis("get", `user:${senderId}`)) as string;
+      const sender = JSON.parse(senderSTR);
+      return {
+        senderId,
+        senderEmail: sender.email,
+        senderImage: sender.image,
+        senderName: sender.name,
+      };
+    })
+  );
+
+  const unseenReqCount = incomingSenderIds.length;
 
   return (
     <>
@@ -57,13 +87,24 @@ const Layout = async ({ children }: LayoutProps) => {
             unseenRequestCount={unseenReqCount}
           />
         </div>
+        <div className="hidden md:block">
+          <UserMenu
+            friendRequests={incomingFriendRequests}
+            user={session.user}
+          />
+        </div>
 
         <div className="hidden dark:bg-slate-800  md:flex h-full w-full max-w-xs grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 dark:border-none  bg-white px-6">
           <Link
             href="/dashboard"
             className="flex h-16 shrink-0  items-center border-b-2 border-gray-200 "
           >
-            <AppLogo />
+            <div className={`flex items-center`}>
+              <Globe className="mL-2" />
+              <span className="text-1xl font-bold tracking-tight  rounded-md p-2">
+                WhosApp
+              </span>
+            </div>
           </Link>
 
           {friends.length > 0 && (
@@ -101,17 +142,10 @@ const Layout = async ({ children }: LayoutProps) => {
                       </li>
                     );
                   })}
-                  <li>
-                    <FriendRequestSidebarOpt
-                      initialUnseenReqCount={unseenReqCount}
-                      sessionId={session.user.id}
-                    />
-                  </li>
                 </ul>
               </li>
 
               <li className="-mx-6 mt-auto flex items-center">
-                <ButtonToggleDarkMode className="absolute top-4 right-4" />
                 <div className="flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 ">
                   <div className="relative h-8 w-8 ">
                     <Image
@@ -137,8 +171,6 @@ const Layout = async ({ children }: LayoutProps) => {
                     </span>
                   </div>
                 </div>
-
-                <SignOutButton className="h-full aspect-square dark:hover:text-gray-50" />
               </li>
             </ul>
           </nav>

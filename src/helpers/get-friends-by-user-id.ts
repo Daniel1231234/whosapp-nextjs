@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { fetchRedis } from './redis'
 
 export const getFriendsByUserId = async (userId: string) => {

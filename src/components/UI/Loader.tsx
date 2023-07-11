@@ -1,5 +1,5 @@
 import React from "react";
-import ClipLoader from "react-spinners/ClipLoader";
+import ClockLoader from "react-spinners/ClockLoader";
 
 interface LoaderProps {
   isLoading: boolean;
@@ -8,7 +8,7 @@ interface LoaderProps {
 const Loader: React.FC<LoaderProps> = ({ isLoading }) => {
   return (
     <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-      <ClipLoader
+      <ClockLoader
         color="white"
         loading={isLoading}
         size={150}

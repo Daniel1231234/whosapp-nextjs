@@ -1,5 +1,4 @@
-const upstashRedisRestUrl = process.env.UPSTASH_REDIS_REST_URL
-const authToken = process.env.UPSTASH_REDIS_REST_TOKEN
+import * as config from "../config/configuration"
 
 type Command = 'zrange' | 'sismember' | 'get' | 'smembers' | 'zrem' | 'set' | 'hset' | "srem"
 
@@ -7,11 +6,11 @@ export async function fetchRedis(
   command: Command,
   ...args: (string | number)[]
 ) {
-  const commandUrl = `${upstashRedisRestUrl}/${command}/${args.join('/')}`
+  const commandUrl = `${config.default().upstashRestUrl}/${command}/${args.join('/')}`
 
   const response = await fetch(commandUrl, {
     headers: {
-      Authorization: `Bearer ${authToken}`,
+      Authorization: `Bearer ${config.default().upstashRestToken}`,
     },
     cache: 'no-store',
   })
@@ -23,3 +22,7 @@ export async function fetchRedis(
   const data = await response.json()
   return data.result
 }
+
+
+
+

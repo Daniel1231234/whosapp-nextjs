@@ -34,26 +34,28 @@ export async function POST(req: Request) {
             return new Response('Already added this user', { status: 400 })
         }
 
-        // check if user is allready added
+        // check if the the both sender and receiver are already friends
         const isAllreadyFriend = await fetchRedis("sismember", `user:${session.user.id}:friends`, idToAdd) as 0 | 1
 
         if (isAllreadyFriend) {
             return new Response('Already friend with this user', { status: 400 })
         }
 
+        const newFriendRequest: IncomingFriendRequest = {
+            senderId: session.user.id,
+            senderEmail: session.user.email,
+            senderImage: session.user.image,
+            senderName: session.user.name,
+        }
+
         await pusherServer.trigger(
-            toPusherKey(`user:${idToAdd}:incoming_friend_requests`), 
-            'incoming_friend_requests', 
-            {
-                senderId:session.user.id,
-                senderEmail:session.user.email
-            }
+            toPusherKey(`user:${idToAdd}:incoming_friend_requests`),
+            'incoming_friend_requests',
+            newFriendRequest
         )
-        
+
         await db.sadd(`user:${idToAdd}:incoming_friend_requests`, session.user.id)
         return new Response('OK')
-
-
 
     } catch (err) {
         if (err instanceof z.ZodError) {

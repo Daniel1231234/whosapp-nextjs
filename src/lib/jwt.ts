@@ -1,4 +1,5 @@
 import jwt, { JwtPayload } from "jsonwebtoken";
+import * as config from "../config/configuration"
 
 interface SignOption {
   expiresIn?: string | number;
@@ -9,14 +10,14 @@ const DEFAULT_SIGN_OPTION: SignOption = {
 };
 
 export function signJwtAccessToken(payload: JwtPayload, options: SignOption = DEFAULT_SIGN_OPTION) {
-  const secret_key = process.env.NEXTAUTH_SECRET;
-  const token = jwt.sign(payload, secret_key!, options);
+  const secret_key = config.default().nextAuthSecret;
+  const token = jwt.sign(payload, secret_key, options);
   return token;
 }
 
 export function verifyJwt(token: string) {
   try {
-    const secret_key = process.env.NEXTAUTH_SECRET
+    const secret_key = config.default().nextAuthSecret
     const decoded = jwt.verify(token, secret_key!)
     return decoded as JwtPayload
   } catch (error) {

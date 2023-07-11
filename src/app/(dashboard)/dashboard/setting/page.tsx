@@ -1,21 +1,9 @@
-import ProfileSection from "@/components/Settings/ProfileSection";
-import { authOptions } from "@/lib/auth";
-import { getServerSession } from "next-auth";
-import { notFound } from "next/navigation";
+import React from "react";
 
 interface PageProps {}
 
-const Page = async ({}: PageProps) => {
-  const session = await getServerSession(authOptions);
-  if (!session) notFound();
-
-  // console.log('session => ', session)
-
-  return (
-    <div className="h-full mx-auto overflow-auto">
-      <ProfileSection user={session.user as User} />
-    </div>
-  );
+const Page: React.FC<PageProps> = ({}) => {
+  return <div className="Page">Page</div>;
 };
 
 export default Page;

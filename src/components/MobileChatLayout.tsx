@@ -14,7 +14,9 @@ import { SidebarOpt } from "@/types/typings";
 import { usePathname, useRouter } from "next/navigation";
 import FriendRequestSidebarOpt from "./FriendRequestSidebarOpt";
 import ButtonToggleDarkMode from "./ToggleDarkMode";
-import AppLogo from "./AppLogo";
+
+import { Globe } from "lucide-react";
+import { useTheme } from "next-themes";
 
 interface MobileChatLayoutProps {
   friends: User[];
@@ -31,18 +33,25 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const router = useRouter();
-
+  const ThemeIcon = Icons["DarkModeIcon"];
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  const { setTheme } = useTheme();
 
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
   return (
     <div className="fixed dark:bg-slate-900 bg-zinc-50 border-b dark:border-transparent border-zinc-200 top-0 inset-x-0 py-0 px-0">
-      <div className="w-full flex justify-between items-center  p-2 bg-zinc-200 dark:bg-slate-700">
-        <Link href="/dashboard" className="">
-          <AppLogo />
+      <div className="w-full flex justify-between items-center p-2 bg-zinc-200 dark:bg-slate-700">
+        <Link href="/dashboard">
+          <Globe />
         </Link>
         <Button onClick={() => setOpen(true)} className="gap-4">
           Menu <Menu className="h-6 w-6" />
@@ -87,8 +96,6 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
                         </div>
                       </div>
                       <div className="relative mt-6 flex-1 px-4 sm:px-6">
-                        {/* Content */}
-
                         {friends.length > 0 ? (
                           <div className="text-xs font-semibold leading-6 text-gray-400">
                             Your chats
@@ -130,12 +137,30 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
                                     </li>
                                   );
                                 })}
+                              </ul>
+                            </li>
 
+                            <li>
+                              <div className="text-xs dark:text-gray-400 font-semibold leading-6 text-gray-400">
+                                General
+                              </div>
+                              <ul role="list" className="-mx-2 mt-2 space-y-1">
                                 <li>
-                                  <FriendRequestSidebarOpt
-                                    initialUnseenReqCount={unseenRequestCount}
-                                    sessionId={session.user.id}
-                                  />
+                                  <div className="text-gray-700  dark:text-gray-50 flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold relative">
+                                    <span className="text-gray-400 border-gray-200  flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white">
+                                      <ThemeIcon className="h-4 w-4" />
+                                    </span>
+                                    <span className="truncate ">Theme</span>
+
+                                    <select
+                                      onChange={(e) => setTheme(e.target.value)}
+                                      className="h-10 text-gray-900 absolute right-4 border border-gray-900 rounded-md"
+                                    >
+                                      <option value="system">System</option>
+                                      <option value="dark">Dark</option>
+                                      <option value="light">Light</option>
+                                    </select>
+                                  </div>
                                 </li>
                               </ul>
                             </li>
@@ -176,8 +201,6 @@ const MobileChatLayout: FC<MobileChatLayoutProps> = ({
                             </li>
                           </ul>
                         </nav>
-
-                        <ButtonToggleDarkMode className="absolute bottom-0 left-4 md:hidden" />
                       </div>
                     </div>
                   </Dialog.Panel>
